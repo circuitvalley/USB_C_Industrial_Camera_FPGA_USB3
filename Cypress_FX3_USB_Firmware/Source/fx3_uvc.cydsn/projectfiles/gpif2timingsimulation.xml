@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<GPIFIITimingSimulation version="1">
+  <Clock>100</Clock>
+  <BufferSize>512</BufferSize>
+  <WaterMark>0</WaterMark>
+</GPIFIITimingSimulation>
