@@ -1,0 +1,2 @@
+create_clock -name {mipi_byte_clock} -period 10 [get_nets mipi_byte_clock]
+create_clock -name {mipi_out_clk} -period 8 [get_nets mipi_out_clk] 
