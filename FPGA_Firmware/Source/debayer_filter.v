@@ -181,7 +181,7 @@ line_ram_dp line3(.wr_clk_i(ram_clk),
 
 
 
-always @(posedge clk_i)	 //address should increment at falling edge of ram_clk. It is inverted from clk_i
+always @(posedge clk_i)	 //address should increment at "falling" edge of "ram_clk". It is inverted from clk_i
 begin
 	if (!line_valid_i )
 	begin
@@ -237,7 +237,7 @@ begin
 	end
 end
 
-always @(negedge clk_i)
+always @(negedge clk_i or posedge reset_i )
 begin
 	if (reset_i)
 	begin
@@ -278,8 +278,6 @@ begin
 					B4[i] <= B4_odd[i];
 				end				
 				
-
-
 			end 	//end odd rows
 			else
 			begin	//even rows  
@@ -319,44 +317,35 @@ end
 wire [((INPUT_WIDTH*3)-1):0]ram_pipe[3:0];
 
 assign ram_pipe[0] = {RAM_out_reg[0], last_ram_outputs[0], last_ram_outputs_stage2[0]}; //ram output delayed by 1 register , previous ram output(history level 1),  previous ram out history level 2
-assign ram_pipe[1] = {RAM_out_reg[1], last_ram_outputs[1], last_ram_outputs_stage2[1]};
+assign ram_pipe[1] = {RAM_out_reg[1], last_ram_outputs[1], last_ram_outputs_stage2[1]}; //packing pixels  {ff,ee,dd,cc,bb,aa}
 assign ram_pipe[2] = {RAM_out_reg[2], last_ram_outputs[2], last_ram_outputs_stage2[2]};
 assign ram_pipe[3] = {RAM_out_reg[3], last_ram_outputs[3], last_ram_outputs_stage2[3]};
 
 always @(*)
 begin
-		for (i=0; i < PIXEL_PER_CLK; i = i +2)
+		for (i=0; i < PIXEL_PER_CLK; i = i +2)		// all pixles calculated for all possible combination but only the correct pixel is put to output,
 		begin
-			B1_even[i] 		= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH]; 
-			B2_even[i] 		= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			B3_even[i] 		= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH]; 
-			B4_even[i] 		= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
 			
-			B1_even[i+1] 	= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH]; 
-			B2_even[i+1] 	= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			B3_even[i+1] 	= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ((i+2)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			B4_even[i+1] 	= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ((i+2)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH];
-		
-			G1_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			G2_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			G3_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			G4_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			R1_odd[i] 		= ram_pipe[ read_ram_index_odd_minus_1 	][((INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
+			R2_odd[i] 		= ram_pipe[ read_ram_index_odd_minus_1 	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			R3_odd[i] 		= ram_pipe[ read_ram_index_odd_plus_1  	][((INPUT_WIDTH+ ( i 	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
+			R4_odd[i] 		= ram_pipe[ read_ram_index_odd_plus_1  	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
 
-			G1_even[i + 1] 	= ram_pipe[ read_ram_index_even		  	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH))					+:PIXEL_WIDTH];
-			G2_even[i + 1] 	= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			G3_even[i + 1] 	= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			G4_even[i + 1] 	= ram_pipe[ read_ram_index_even		  	][ (INPUT_WIDTH+ ((i+2)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			R1_odd[i + 1] 	= ram_pipe[ read_ram_index_odd_minus_1	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH]; 
+			R2_odd[i + 1] 	= ram_pipe[ read_ram_index_odd_plus_1	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH]; 
+			R3_odd[i + 1] 	= ram_pipe[ read_ram_index_odd_minus_1	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH]; 
+			R4_odd[i + 1] 	= ram_pipe[ read_ram_index_odd_plus_1	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH]; 
 
-			R1_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 	 		  		+:PIXEL_WIDTH];
-			R2_even[i] 		= ram_pipe[ read_ram_index_even 		][((INPUT_WIDTH+ ((i)	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
-			R3_even[i] 		= ram_pipe[ read_ram_index_even 		][((INPUT_WIDTH+ ((i)	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
-			R4_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))    		  		+:PIXEL_WIDTH];
+			G1_odd[i] 		= ram_pipe[ read_ram_index_odd_minus_1 	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 	 			   	+:PIXEL_WIDTH];
+			G2_odd[i] 		= ram_pipe[ read_ram_index_odd_plus_1  	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 	 			   	+:PIXEL_WIDTH];
+			G3_odd[i] 		= ram_pipe[ read_ram_index_odd    	 	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 			   		+:PIXEL_WIDTH];
+			G4_odd[i] 		= ram_pipe[ read_ram_index_odd 		 	][((INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
+
+			G1_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G2_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G3_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G4_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
 			
-			R1_even[i + 1] 	= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			R2_even[i + 1] 	= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			R3_even[i + 1] 	= ram_pipe[ read_ram_index_even  		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			R4_even[i + 1] 	= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-
 			B1_odd[i] 		= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
 			B2_odd[i] 		= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
 			B3_odd[i] 		= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
@@ -367,25 +356,37 @@ begin
 			B3_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH))					+:PIXEL_WIDTH];
 			B4_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+2)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH];
 			
-			G1_odd[i] 		= ram_pipe[ read_ram_index_odd_minus_1 	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 	 			   	+:PIXEL_WIDTH];
-			G2_odd[i] 		= ram_pipe[ read_ram_index_odd_plus_1  	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 	 			   	+:PIXEL_WIDTH];
-			G3_odd[i] 		= ram_pipe[ read_ram_index_odd    	 	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 			   		+:PIXEL_WIDTH];
-			G4_odd[i] 		= ram_pipe[ read_ram_index_odd 		 	][((INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
+			R1_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 	 		  		+:PIXEL_WIDTH];
+			R2_even[i] 		= ram_pipe[ read_ram_index_even 		][((INPUT_WIDTH+ ((i)	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
+			R3_even[i] 		= ram_pipe[ read_ram_index_even 		][((INPUT_WIDTH+ ((i)	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
+			R4_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))    		  		+:PIXEL_WIDTH];
+			
+			R1_even[i + 1] 	= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			R2_even[i + 1] 	= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			R3_even[i + 1] 	= ram_pipe[ read_ram_index_even  		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			R4_even[i + 1] 	= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+					
+			G1_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G2_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G3_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G4_even[i] 		= ram_pipe[ read_ram_index_even 		][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
 
-			G1_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			G2_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			G3_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			G4_odd[i + 1] 	= ram_pipe[ read_ram_index_odd 			][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G1_even[i + 1] 	= ram_pipe[ read_ram_index_even		  	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH))					+:PIXEL_WIDTH];
+			G2_even[i + 1] 	= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G3_even[i + 1] 	= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ((i+1) *	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			G4_even[i + 1] 	= ram_pipe[ read_ram_index_even		  	][ (INPUT_WIDTH+ ((i+2)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
 
-			R1_odd[i] 		= ram_pipe[ read_ram_index_odd_minus_1 	][((INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
-			R2_odd[i] 		= ram_pipe[ read_ram_index_odd_minus_1 	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
-			R3_odd[i] 		= ram_pipe[ read_ram_index_odd_plus_1  	][((INPUT_WIDTH+ ( i 	*	PIXEL_WIDTH)) - PIXEL_WIDTH) 	+:PIXEL_WIDTH];
-			R4_odd[i] 		= ram_pipe[ read_ram_index_odd_plus_1  	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			B1_even[i] 		= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH]; 
+			B2_even[i] 		= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			B3_even[i] 		= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH]; 
+			B4_even[i] 		= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			
+			B1_even[i+1] 	= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH]; 
+			B2_even[i+1] 	= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ( i	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			B3_even[i+1] 	= ram_pipe[ read_ram_index_even_minus_1	][ (INPUT_WIDTH+ ((i+2)	*	PIXEL_WIDTH)) 					+:PIXEL_WIDTH];
+			B4_even[i+1] 	= ram_pipe[ read_ram_index_even_plus_1 	][ (INPUT_WIDTH+ ((i+2)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH];
 
-			R1_odd[i + 1] 	= ram_pipe[ read_ram_index_odd_minus_1	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH]; 
-			R2_odd[i + 1] 	= ram_pipe[ read_ram_index_odd_plus_1	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH]; 
-			R3_odd[i + 1] 	= ram_pipe[ read_ram_index_odd_minus_1	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH]; 
-			R4_odd[i + 1] 	= ram_pipe[ read_ram_index_odd_plus_1	][ (INPUT_WIDTH+ ((i+1)	*	PIXEL_WIDTH))					+:PIXEL_WIDTH]; 
+
 		end			
 end
 endmodule
