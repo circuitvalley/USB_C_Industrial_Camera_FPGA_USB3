@@ -95,7 +95,7 @@ end
 
 always @(posedge clk_i ) 
 begin
-	if (reset_i || (!lane_valid_o && (!(|valid)))) //always reset when lane_valid_o is active, valid
+	if (reset_i || ((!lane_valid_o) && (!(|valid)))) //always reset when lane_valid_o is active
 	begin		
 		for (i= 0; i <MIPI_LANES; i = i + 1'h1)
 		begin
@@ -127,7 +127,7 @@ begin
 	end
 	else
 	begin
-		lane_valid_reg <=( &valid)? 1'h1:(lane_valid_o && |valid)? 1'h1 : 1'h0; //one clock delay to the last packet
+		lane_valid_reg <=( &valid)? 1'h1:(lane_valid_o && |valid)? 1'h1 : 1'h0; //one clock delay to the last packet and once active keep active even if one of the valid is high
 		lane_valid_o <= lane_valid_reg;
 		if (!lane_valid_reg)
 		begin
