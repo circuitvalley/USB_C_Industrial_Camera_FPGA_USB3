@@ -38,7 +38,7 @@ module mipi_csi_16_nx(	//reset_in,
 					
 parameter MIPI_LANES = 2;			//number of mipi lanes with camera. Only 2 or 4
 parameter MIPI_GEAR = 8;			//deserializer gearing ratio. Only 8 or 16 
-parameter MIPI_PIXEL_PER_CLOCK = 2; // number of pixels pipeline process in one clock cycle. Only 2,4 or 8
+parameter MIPI_PIXEL_PER_CLOCK = 2; // number of pixels pipeline process in one clock cycle. With 2 Lanes and Gear 8 only 2 or 4, With 4 Lanes only 4 or 8 
 parameter MAX_PIXEL_WIDTH = 12;   	//max pixel width , 14bit (RAW14) , IMX219 has 10bit while IMX477 has 12bit and IMX294 has 14bit
 //input reset_in;
 input mipi_clk_p_in;
@@ -357,8 +357,7 @@ output_reformatter #(.PIXEL_PER_CLK(MIPI_PIXEL_PER_CLOCK))out_reformatter_0( .cl
 																			 .data_i(yuv_data),
 																			 .data_in_valid_i(is_yuv_valid),
 																			 .output_o(data_o),
-																			 .output_valid_o(lsync_o),
-																			 .debug_16());
+																			 .output_valid_o(lsync_o));
 
 
 assign pclk_o = mipi_out_clk; 	//output clock always available
