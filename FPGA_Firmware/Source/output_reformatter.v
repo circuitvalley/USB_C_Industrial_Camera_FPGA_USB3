@@ -23,10 +23,9 @@ module  output_reformatter #(parameter PIXEL_PER_CLK=8 )(
 						  data_i,
 						  data_in_valid_i, //expected active high
 						  line_sync_i, //expected active high
-						  output_o,
-						  output_valid_o, //active high
 						  frame_sync_i,  //expected active low
-						  debug_16
+						  output_o,
+						  output_valid_o //active high
 						  );
 				  
 input line_sync_i;
@@ -37,7 +36,6 @@ input [((PIXEL_PER_CLK * 8 * 2) - 1 ):0]data_i;
 output reg output_valid_o;
 output [31:0]output_o;
 input output_clk_i;
-output [15:0]debug_16;
 
 reg [10:0] write_address;
 reg [11:0] read_address;
@@ -121,7 +119,6 @@ out_line_ram_ldp line_even(	.clk_i((!line_even_nodd)?!clk_i:output_clk_i),
 assign output_o = line_even_nodd_clk_i? ram_odd_o:ram_even_o; //depeding on line select even or odd ram 
 
 
-assign debug_16 = input_pixel_count_out_clk;
 
 always @(posedge clk_i )
 begin
