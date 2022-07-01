@@ -84,12 +84,12 @@ begin
 
 		Y_R[i] <= ( 77 * rgb_i[((i* (PIXEL_WIDTH*3)) + (PIXEL_WIDTH*2)) +: PIXEL_WIDTH]);
 		Y_G[i] <= (150 * rgb_i[((i* (PIXEL_WIDTH*3)) + (PIXEL_WIDTH  )) +: PIXEL_WIDTH]);
-		Y_B[i] <= ( 29 * rgb_i[ (i* (PIXEL_WIDTH*3)) 					+: PIXEL_WIDTH]);
+		Y_B[i] <= ( 29 * rgb_i[ (i* (PIXEL_WIDTH*3)) 					+: PIXEL_WIDTH]); 
 
 		Y_ADD[i] <= Y_R[i] + Y_G[i];
 		Y_B_STAGE_ADD[i] <= Y_B[i] + 24'd128;
 		
-		Y_ADD_STAGE2[i] <=  (Y_ADD[i] + Y_B_STAGE_ADD[i] )>> PIXEL_WIDTH ;
+		Y_ADD_STAGE2[i] <=  (Y_ADD[i] + Y_B_STAGE_ADD[i]) >> PIXEL_WIDTH ;
 		Y[i] = Y_ADD_STAGE2[i];
 
 	end
@@ -101,32 +101,32 @@ begin
 		U_G[i] <= (84  * rgb_i[((i* (PIXEL_WIDTH*3)) + (PIXEL_WIDTH  )) +: PIXEL_WIDTH]);
 		U_B[i] <= {		 rgb_i[( i* (PIXEL_WIDTH*3))  					+: PIXEL_WIDTH], 7'b0} - rgb_i[(i*(PIXEL_WIDTH*3)) 					   +: PIXEL_WIDTH]; // B*127 is converted to  val << 7 - val to save dsp * operation
 
-		V_R[i] <= {		 rgb_i[((i* (PIXEL_WIDTH*3)) + (PIXEL_WIDTH*2)) +: PIXEL_WIDTH], 7'b0} - rgb_i[((i*(PIXEL_WIDTH*3)) + (PIXEL_WIDTH*2)) +: PIXEL_WIDTH];
+		V_R[i] <= {		 rgb_i[((i* (PIXEL_WIDTH*3)) + (PIXEL_WIDTH*2)) +: PIXEL_WIDTH], 7'b0} - rgb_i[((i* (PIXEL_WIDTH*3)) + (PIXEL_WIDTH*2)) +: PIXEL_WIDTH];
 		V_G[i] <= (106 * rgb_i[((i* (PIXEL_WIDTH*3)) + (PIXEL_WIDTH  )) +: PIXEL_WIDTH]);
 		V_B[i] <= ( 21 * rgb_i[ (i* (PIXEL_WIDTH*3)) 					+: PIXEL_WIDTH]);
 
 		U_ADD[i] <= U_R[i] + U_G[i];
-		V_ADD[i] <= V_R[i] - V_G[i];
+		V_ADD[i] <= V_B[i] + V_G[i];
 
 		U_B_STAGE_ADD[i] <= U_B[i] + 24'd128;
-		V_B_STAGE_ADD[i] <= V_B[i] + 24'd128;
+		V_B_STAGE_ADD[i] <= V_R[i] + 24'd128;
 
 		U_ADD_STAGE2[i] <=  (U_B_STAGE_ADD[i] - U_ADD[i]) >> PIXEL_WIDTH;
-		U[i] = U_ADD_STAGE2[i]  + 24'd128;
+		U[i] = U_ADD_STAGE2[i]  + 8'd128;
 
-		V_ADD_STAGE2[i] <=  (V_ADD[i] - V_B_STAGE_ADD[i]) >> PIXEL_WIDTH;
-		V[i] = V_ADD_STAGE2[i] + 24'd128;
+		V_ADD_STAGE2[i] <=  (V_B_STAGE_ADD[i] - V_ADD[i]) >> PIXEL_WIDTH;
+		V[i] = V_ADD_STAGE2[i] + 8'd128;
 
 	end
 
 	for (i=0;i<PIXEL_PER_CLK; i = i + 2)	//only alternate U and V needed
 	begin
-		yuv_o[( (i*2)    * 8) +: 8] = V[i] ;
+		yuv_o[( (i*2)    * 8) +: 8] = V[i];
 		yuv_o[(((i*2)+1) * 8) +: 8] = Y[i+1];
 		yuv_o[(((i*2)+2) * 8) +: 8] = U[i];
 		yuv_o[(((i*2)+3) * 8) +: 8] = Y[i];
 	end
-
+	//GPIF configed as big endian so expects first bytes at MSbyte
 end
 
 endmodule
