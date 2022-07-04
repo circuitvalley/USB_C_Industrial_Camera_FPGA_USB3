@@ -5,7 +5,7 @@ No virtual restrication on Supported Frame Rate or Resolution Tested more than 4
 Easily Portable code to Xilinx or any other FPGA, No Vendor specific components has been used except for the PHY itself which can be replaced by other vendor's DDR phy and Embedded Block RAM. Only Debayer/Demosaic and Output reformatter need Block RAM. Block ram can also be replaced vendor's RAM. 
 
 #### Speed
-MIPI bus can be upto 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps Has been Tested upto 900Mbitsps with 8x Gear.</br>
+Supports MIPI bus clock 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps, Has been Tested upto 900Mbitsps with 8x Gear.</br>
 Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach morethan 110Mhz with Lattice Crosslink-NX LIFCL-40 High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480. Whith Different FPGA speed will very</br>
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz.</br>
 
