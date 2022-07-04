@@ -4,8 +4,8 @@
 No virtual restrication on Supported Frame Rate or Resolution Tested more than 4K with IMX477 4056 x 3040. Can do 8K with around 30FPS or even higher than that as long as FPGA is fast enough for needed frame rate and FPGA has enough memory to be able to store ~ 6 Line worth of pixels. 
 
 ##### Configurability
-Selectable RAW pixel width
-FPGA Design is configurable with parameters to support pixel depth from RAW10 to RAW14 or Veritually any bit depth even 16bit RAW when it becomes a MIPI Spec, 
+Selectable RAW pixel widths</br>
+FPGA Design is configurable with parameters to support pixel depth from RAW10 to RAW14 or Veritually any bit depth even 16bit RAW when it becomes a MIPI Spec.s</br>
 Selectable number of MIPI lanes</br>
 With just definition of Parameter value number of lane is also configurable between 2 or 4 MIPI lanes.</br>
 Selectable Pipline Size</br>
