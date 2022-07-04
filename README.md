@@ -27,7 +27,10 @@ Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width ,
 1332x990  100 FPS</br>
 
 2 Lane 12 bit IMX477</br>
-1920x1080  50 FPS</br>
+4056x3040  10 FPS</br>
+2028x1520  35 FPS Full Sensor Binned</br> 
+2028x1080  50 FPS</br>
+
 
 2 Lane 10 bit IMX219</br>
 3280x2464 7 FPS</br>
