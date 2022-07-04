@@ -24,7 +24,7 @@ Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width ,
 
 #### Tests 
 2 Lane 10 bit IMX477</br>
-1332x990  60 FPS</br>
+1332x990  100 FPS</br>
 
 2 Lane 10 bit IMX219</br>
 3280x2464 7 FPS</br>
