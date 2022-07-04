@@ -1,7 +1,5 @@
 ### Opensource USB C industrial camera with Interchangeable C mount Lens, Interchangeable MIPI Sensor with Lattice Crosslink NX FPGA Cypress FX3 USB 3.0 controller
 
-
-
 ##### ISP Pipline Specifications 
 No virtual restrication on Supported Frame Rate or Resolution Tested more than 4K with IMX477 4056 x 3040. Can do 8K with around 30FPS or even higher than that as long as FPGA is fast enough for needed frame rate and FPGA has enough memory to be able to store ~ 6 Line worth of pixels. 
 
@@ -11,7 +9,7 @@ FPGA Design is configurable with parameters to support pixel depth from RAW10 to
 Selectable number of MIPI lanes
 With just definition of Parameter value number of lane is also configurable between 2 or 4 MIPI lanee, 
 Selectable Pipline Size
-Pipline is Configurable with a parameter to Process 2,4 or 8 Pixel.  2 Pixel Per Clock is only available with 2 Lane MIPI while 8 is only available with 4 Lanes. 
+Pipline is Configurable with a parameter to Process 2,4 or 8 Pixel.  2 Pixel Per Clock is only available with 2 Lane MIPI, while 8 is only available with 4 Lanes. 
 Selectable MIPI Gear Ratio
 User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DDR/MIPI phy supports 8x Gear while few do support 16x gear. 
 
@@ -19,6 +17,7 @@ User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DD
 MIPI Speed can reach upto 900Mbitsps Has been Tested upto 900Mbitps with 8x Gear.
 Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach 110Mhz or more with Lattice Crosslink-NX High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480 .  
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz. 
+
 
 ##### Tests 
 2 Lane 10 bit IMX477</br>
