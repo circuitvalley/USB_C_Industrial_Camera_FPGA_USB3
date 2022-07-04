@@ -14,7 +14,7 @@ Selectable MIPI Gear Ratio</br>
 User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DDR/MIPI phy supports 8x Gear while few do support 16x gear.</br>
 
 ##### Speed
-MIPI Speed can reach upto 900Mbitsps Has been Tested upto 900Mbitps with 8x Gear.</br>
+MIPI bus can be upto 900Mbitsps Per lane with upto 4 Lanes, Total 3.6GBitsps Has been Tested upto 900Mbitps with 8x Gear.</br>
 Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach 110Mhz or more with Lattice Crosslink-NX High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480.</br>
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz.</br>
 
