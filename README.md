@@ -22,17 +22,25 @@ FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit
 
 ##### Tests 
 2 Lane 10 bit IMX477
-1332x990 60 FPS
+1332x990  60 FPS
 
 2 Lane 10 bit IMX219
 3280x2464 7 FPS
-1280x720 30 FPS
-1280x720 60 FPS
+
+1280x720  30 FPS
+
+1280x720  60 FPS
+
 1920x1080 30 FPS
-640x480 30 FPS
-640x480 200 FPS
-640x128 600 FPS
-640x80 900 FPS
+
+640x480   30 FPS
+
+640x480   200 FPS
+
+640x128   600 FPS
+
+640x80    900 FPS
+
 
 
 #### Project Blog post 
