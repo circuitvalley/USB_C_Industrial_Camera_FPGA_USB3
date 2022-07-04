@@ -4,7 +4,7 @@
 No virtual restrication on Supported Frame Rate or Resolution Tested more than 4K with IMX477 4056 x 3040. Can do 8K with around 30FPS or even higher than that as long as FPGA is fast enough for needed frame rate and FPGA has enough memory to be able to store minimum 4 Line worth of pixels. Output Clock is independent of MIPI clock. 
 
 #### Speed
-MIPI bus can be upto 900Mbitsps Per lane with upto 4 Lanes, Total 3.6GBitsps Has been Tested upto 900Mbitps with 8x Gear.</br>
+MIPI bus can be upto 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps Has been Tested upto 900Mbitsps with 8x Gear.</br>
 Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach 110Mhz or more with Lattice Crosslink-NX High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480.</br>
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz.</br>
 
