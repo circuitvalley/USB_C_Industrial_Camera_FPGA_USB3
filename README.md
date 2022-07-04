@@ -2,7 +2,8 @@
 
 ## ISP Pipeline Specifications 
 No virtual restrication on Supported Frame Rate or Resolution Tested more than 4K with IMX477 4056 x 3040. Can do 8K with around 30FPS or even higher than that as long as FPGA is fast enough for needed frame rate and FPGA has enough memory to be able to store minimum 4 Line worth of pixels. Output Clock is independent of MIPI clock. 
-Easily Portable code to Xilinx or any other FPGA, No Vendor specific components has been used except for the PHY itself which can be replaced by other vendor's DDR phy and Embedded Block RAM. Only Debayer/Demosaic and Output reformatter need Block RAM. Block ram can also be replaced vendor's RAM. 
+Easily Portable code to Xilinx or any other FPGA, No Vendor specific components has been used except for the PHY itself which can be replaced by other vendor's DDR phy and Embedded Block RAM. Only Debayer/Demosaic and Output reformatter need Block RAM. Block ram can also be replaced vendor's RAM.
+Auto detection of RAW pixel width supporting different camera sensors and sensor modes without FPGA reconfiguration. 
 
 #### Speed
 Supports MIPI bus clock 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps, Has been Tested upto 900Mbitsps with 8x Gear.</br>
@@ -10,8 +11,8 @@ Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach morethan 110Mh
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz.</br>
 
 #### Configurability
-**Selectable RAW pixel widths**</br>
-FPGA Design is configurable with parameters to support pixel depth from RAW10 to RAW14 or Veritually any bit depth even 16bit RAW when it becomes a MIPI Spec.s</br>
+**Selectable max RAW pixel widths**</br>
+FPGA Design is configurable with parameters to support pixel depth from RAW10 to RAW14 or Veritually any bit depth even 16bit RAW when it becomes a MIPI Specs. Parameter specify maximum pixel width that is supported while module auto detect package type at runtime with RAW14 selected as max pixel width, RAW10, RAW12 and RAW14 will be automatically detected and processed</br>
 **Selectable number of MIPI lanes**</br>
 With just definition of Parameter value number of lane is also configurable between 2 or 4 MIPI lanes.</br>
 **Selectable Pipeline Size**</br>
