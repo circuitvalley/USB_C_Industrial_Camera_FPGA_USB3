@@ -11,7 +11,7 @@ Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach morethan 110Mh
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz.</br>
 
 #### Configurability
-**Selectable max RAW pixel widths**</br>
+**Selectable max RAW pixel width**</br>
 FPGA Design is configurable with parameters to support pixel depth from RAW10 to RAW14 or Veritually any bit depth even 16bit RAW when it becomes a MIPI Specs. Parameter specify maximum pixel width that is supported while module auto detect package type at runtime with RAW14 selected as max pixel width, RAW10, RAW12 and RAW14 will be automatically detected and processed</br>
 **Selectable number of MIPI lanes**</br>
 With just definition of Parameter value number of lane is also configurable between 2 or 4 MIPI lanes.</br>
