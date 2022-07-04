@@ -6,7 +6,7 @@ Easily Portable code to Xilinx or any other FPGA, No Vendor specific components 
 
 #### Speed
 MIPI bus can be upto 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps Has been Tested upto 900Mbitsps with 8x Gear.</br>
-Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach 110Mhz or more with Lattice Crosslink-NX High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480. Whith Different FPGA speed will very</br>
+Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach morethan 110Mhz with Lattice Crosslink-NX LIFCL-40 High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480. Whith Different FPGA speed will very</br>
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz.</br>
 
 #### Configurability
