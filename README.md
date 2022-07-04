@@ -21,18 +21,18 @@ Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach 110Mhz or more
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz. 
 
 ##### Tests 
-2 Lane 10 bit IMX477
-1332x990  60 FPS
+2 Lane 10 bit IMX477</br>
+1332x990  60 FPS</br>
 
-2 Lane 10 bit IMX219
-3280x2464 7 FPS
-1280x720  30 FPS
-1280x720  60 FPS
-1920x1080 30 FPS
-640x480   30 FPS
-640x480   200 FPS
-640x128   600 FPS
-640x80    900 FPS
+2 Lane 10 bit IMX219</br>
+3280x2464 7 FPS</br>
+1280x720  30 FPS</br>
+1280x720  60 FPS</br>
+1920x1080 30 FPS</br>
+640x480   30 FPS</br>
+640x480   200 FPS</br>
+640x128   600 FPS</br>
+640x80    900 FPS</br>
 
 
 
