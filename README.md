@@ -2,10 +2,11 @@
 
 ## ISP Pipeline Specifications 
 No virtual restrication on Supported Frame Rate or Resolution Tested more than 4K with IMX477 4056 x 3040. Can do 8K with around 30FPS or even higher than that as long as FPGA is fast enough for needed frame rate and FPGA has enough memory to be able to store minimum 4 Line worth of pixels. Output Clock is independent of MIPI clock. 
+Easily Portable code to Xilinx or any other FPGA, No Vendor specific components has been used except for the PHY itself which can be replaced by other vendor's DDR phy and Embedded Block RAM. Only Debayer/Demosaic and Output reformatter need Block RAM. Block ram can also be replaced vendor's RAM. 
 
 #### Speed
 MIPI bus can be upto 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps Has been Tested upto 900Mbitsps with 8x Gear.</br>
-Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach 110Mhz or more with Lattice Crosslink-NX High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480.</br>
+Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach 110Mhz or more with Lattice Crosslink-NX High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480. Whith Different FPGA speed will very</br>
 FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz.</br>
 
 #### Configurability
@@ -17,7 +18,7 @@ With just definition of Parameter value number of lane is also configurable betw
 Pipeline is Configurable with a parameter to Process 2,4 or 8 Pixel.  2 Pixel Per Clock is only available with 2 Lane MIPI, while 8 Pixel Per Clock is only available with 4 Lanes.</br>
 **Selectable MIPI Gear Ratio**</br>
 User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DDR/MIPI phy supports 8x Gear while few do support 16x gear.</br>
-
+Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width , lane or PPC is changed. 
 
 
 #### Tests 
