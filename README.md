@@ -14,7 +14,7 @@ FPGA Design is configurable with parameters to support pixel depth from RAW10 to
 **Selectable number of MIPI lanes**</br>
 With just definition of Parameter value number of lane is also configurable between 2 or 4 MIPI lanes.</br>
 **Selectable Pipeline Size**</br>
-Pipeline is Configurable with a parameter to Process 2,4 or 8 Pixel.  2 Pixel Per Clock is only available with 2 Lane MIPI, while 8 is only available with 4 Lanes.</br>
+Pipeline is Configurable with a parameter to Process 2,4 or 8 Pixel.  2 Pixel Per Clock is only available with 2 Lane MIPI, while 8 Pixel Per Clock is only available with 4 Lanes.</br>
 **Selectable MIPI Gear Ratio**</br>
 User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DDR/MIPI phy supports 8x Gear while few do support 16x gear.</br>
 
