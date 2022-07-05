@@ -24,7 +24,7 @@ User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DD
 Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width , lane or PPC is changed.</br>
 
 
-#### Tests 
+### Tests 
 ------------
 2 Lane 12 bit IMX477</br>
 4056x3040  10 FPS Full Sensor</br>
