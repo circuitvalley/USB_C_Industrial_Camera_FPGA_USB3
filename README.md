@@ -6,18 +6,20 @@ Easily Portable code to Xilinx or any other FPGA, No Vendor specific components 
 Auto detection of RAW pixel width supporting different camera sensors and sensor modes without FPGA reconfiguration. 
 
 #### Speed
-Supports MIPI bus clock 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps Sensor bit stream, Has been Tested upto 900Mbitsps with 8x Gear.</br>
-Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach more than 110Mhz with Lattice Crosslink-NX LIFCL-40 High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480 as long as Camera and MIPI Wire allows. With Different Faster FPGA speed will be more.</br>
-FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Cyress FX3's specs limits max GPIF clock to 100Mhz.</br>
+------------
+-Supports MIPI bus clock 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps Sensor bit stream, Has been Tested upto 900Mbitsps with 8x Gear.</br>
+-Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach more than 110Mhz with Lattice Crosslink-NX LIFCL-40 High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480 as long as Camera and MIPI Wire allows. With Different Faster FPGA speed will be more.</br>
+-FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Cyress FX3's specs limits max GPIF clock to 100Mhz.</br>
 
 #### Configurability
-**Selectable max RAW pixel width**</br>
+------------
+-**Selectable max RAW pixel width**</br>
 FPGA Design is configurable with parameters to support pixel depth from RAW10 to RAW14 or Veritually any bit depth even 16bit RAW when it becomes a MIPI Specs. Parameter specify maximum pixel width that is supported while module auto detect package type at runtime with RAW14 selected as max pixel width, RAW10, RAW12 and RAW14 will be automatically detected and processed</br>
-**Selectable number of MIPI lanes**</br>
+-**Selectable number of MIPI lanes**</br>
 With just definition of Parameter value number of lane is also configurable between 2 or 4 MIPI lanes.</br>
-**Selectable Pipeline Size**</br>
+-**Selectable Pipeline Size**</br>
 Pipeline is Configurable with a parameter to Process 2,4 or 8 Pixel.  2 Pixel Per Clock is only available with 2 Lane MIPI, while 8 Pixel Per Clock is only available with 4 Lanes.</br>
-**Selectable MIPI Gear Ratio**</br>
+-**Selectable MIPI Gear Ratio**</br>
 User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DDR/MIPI phy supports 8x Gear while few do support 16x gear.</br>
 Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width , lane or PPC is changed.</br>
 
