@@ -7,8 +7,8 @@ Auto detection of RAW pixel width supporting different camera sensors and sensor
 
 #### Speed
 Supports MIPI bus clock 900Mbitsps Per lane with upto 4 Lanes, Total 3.6Gbitsps Sensor bit stream, Has been Tested upto 900Mbitsps with 8x Gear.</br>
-Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach morethan 110Mhz with Lattice Crosslink-NX LIFCL-40 High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480 as long as Camera and MIPI Wire allows. With Different Faster FPGA speed will very.</br>
-FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Which FX3's specs limits max GPIF clock to 100Mhz.</br>
+Pixel Processing pipeline with 2,4 or 8 Pixel per clock can reach more than 110Mhz with Lattice Crosslink-NX LIFCL-40 High Speed, So basically Can process upto 880 MegaPixels per second. With this can reach Around 120FPS with 4K resolution and around 30 FPS with 8K. Or even 3000 FPS with 640 x 480 as long as Camera and MIPI Wire allows. With Different Faster FPGA speed will be more.</br>
+FPGA Oputput Pipeline that runs on output clock, It feeds into Cypress FX3 32bit GPIF can do Max 160Mhz. Cyress FX3's specs limits max GPIF clock to 100Mhz.</br>
 
 #### Configurability
 **Selectable max RAW pixel width**</br>
@@ -19,7 +19,7 @@ With just definition of Parameter value number of lane is also configurable betw
 Pipeline is Configurable with a parameter to Process 2,4 or 8 Pixel.  2 Pixel Per Clock is only available with 2 Lane MIPI, while 8 Pixel Per Clock is only available with 4 Lanes.</br>
 **Selectable MIPI Gear Ratio**</br>
 User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DDR/MIPI phy supports 8x Gear while few do support 16x gear.</br>
-Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width , lane or PPC is changed. 
+Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width , lane or PPC is changed.</br>
 
 
 #### Tests 
@@ -73,5 +73,3 @@ License][cc-by].
 ![alt text](https://github.com/circuitvalley/USB_C_Industrial_Camera_FPGA_USB3/raw/master/Hardware/Images/usb_c_fpga_mipi_camera_c_mount_industrial_lattice_crosslink_fpga_xilinx_zynq%20(19).JPG)
 
 ![alt text](https://github.com/circuitvalley/USB_C_Industrial_Camera_FPGA_USB3/raw/master/Hardware/Images/usb_c_fpga_mipi_camera_c_mount_industrial_lattice_crosslink_fpga_xilinx_zynq%20(12)24.JPG)
-
-
