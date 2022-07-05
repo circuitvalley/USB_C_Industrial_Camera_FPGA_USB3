@@ -42,16 +42,20 @@ output raw_line_o;
 
 reg [7:0]index_table_pixel_0[3:0];
 reg [7:0]index_table_pixel_1[3:0];
-
 reg [7:0]index_table_pixel_lsb1[3:0];
+
+reg [7:0]index_table12_pixel_0[3:0];
+reg [7:0]index_table12_pixel_1[3:0];
+reg [7:0]index_table12_pixel_lsb1[3:0];
 
 
 reg [7:0]offset_pixel_0;
 reg [7:0]offset_pixel_1;
-
 reg [7:0]offset_pixel_lsb1;
 
-
+reg [7:0]offset12_pixel_0;
+reg [7:0]offset12_pixel_1;
+reg [7:0]offset12_pixel_lsb1;
 
 reg [1:0]offset_index;
 			
@@ -61,12 +65,10 @@ reg [1:0]idle_count;
 
 reg data_valid_reg;
 reg [((MIPI_GEAR * LANES) - 1'h1):0]data_reg;
-reg [7:0]offset_factor_reg;
 reg [2:0]burst_length_reg;
 reg [1:0]idle_length_reg;
 reg [2:0]packet_type_reg;
 
-wire [7:0]offset_factor;
 wire [2:0]burst_length;
 wire [1:0]idle_length;
 wire [((MIPI_GEAR * LANES * 4) - 1'h1) :0]pipe; //combined current and last input data byte, total 4 sample of input data are in pipe
@@ -77,11 +79,11 @@ reg [((PIXEL_WIDTH * PIXEL_PER_CLK) - 1'h1) :0]output_14b;
 reg output_valid_reg;
 reg output_valid_reg_2;
 
-assign pipe = {data_reg , last_data_i[0], last_data_i[1], last_data_i[2]}; //would need last bytes as well as current data to get full 8 pixel , with 16x gering bytes are arrange as [bb,aa]
+assign pipe = {data_reg , last_data_i[0], last_data_i[1], last_data_i[2]}; //would need last bytes as well as current data to get all pixels
 
 				
-assign offset_factor = (packet_type_i == (MIPI_CSI_PACKET_10bRAW & 8'h07))? 8'd32: (packet_type_i == (MIPI_CSI_PACKET_12bRAW & 8'h07))? 8'd32:8'd48;
-					   
+//Data on mipi RAW lanes is packed, after unpacking speed grows so there is going to inactive and active part					   
+//For RAW10 4+1 RAW12 2+1 RAW14 5+3
 assign burst_length =  ((packet_type_i == (MIPI_CSI_PACKET_10bRAW & 8'h07)) || (packet_type_i == (MIPI_CSI_PACKET_14bRAW & 8'h07)))? 8'd5:8'd3;	 //active + 1	   
 						
 assign idle_length =  ((packet_type_i == (MIPI_CSI_PACKET_10bRAW & 8'h07)) || (packet_type_i == (MIPI_CSI_PACKET_12bRAW & 8'h07)))? 2'd1: 2'd3; //inactive
@@ -93,12 +95,14 @@ always @(*)
 begin
 	
 	output_10b[(PIXEL_WIDTH)   +: PIXEL_WIDTH] = 	{pipe [offset_pixel_1 	+:8], 	pipe[(offset_pixel_lsb1+2) +:2],  {(PIXEL_WIDTH - 10){1'b0}}};		//lane 2 //add ( PIXEL_WIDTH - 10 ) padding in the LSbits
-	output_10b[0  			   +: PIXEL_WIDTH]  = 	{pipe [offset_pixel_0	+:8], 	pipe[offset_pixel_lsb1 	   +:2],  {(PIXEL_WIDTH - 10){1'b0}}}; 		//lane 1 first pixel on wire	
+	output_10b[0  			   +: PIXEL_WIDTH] = 	{pipe [offset_pixel_0	+:8], 	pipe[offset_pixel_lsb1 	   +:2],  {(PIXEL_WIDTH - 10){1'b0}}}; 		//lane 1 first pixel on wire	
 	//additional LSbits  are as follow [ pixel3 pixel2 pixel 1 pixel0]
-/*
-	output_12b[31:16] = 	{pipe [offset_15 	-:8], 	pipe [offset_39 	-:4]} << 4;
-	output_12b[15:0]  = 	{pipe [offset_7 	-:8], 	pipe [offset_35 	-:4]} << 4; 		//lane 1
-	
+
+	output_12b[(PIXEL_WIDTH)   +: PIXEL_WIDTH] =	{pipe [offset12_pixel_1 +:8], 	pipe[(offset12_pixel_lsb1+4)	+:4],  {(PIXEL_WIDTH - 12){1'b0}}};
+	output_12b[0  			   +: PIXEL_WIDTH] =	{pipe [offset12_pixel_0	+:8], 	pipe[offset12_pixel_lsb1 		+:4],  {(PIXEL_WIDTH - 12){1'b0}}}; 		//lane 1 first pixel on wire
+	//additional LSbits  are as follow [pixel 1 pixel0]
+
+/*	
 	output_14b[31:16] = 	{pipe [offset_15 	-:8], 	pipe [offset_43 	-:6]} << 2;
 	output_14b[15:0]  = 	{pipe [offset_7 	-:8], 	pipe [offset_37 	-:6]} << 2; 		//lane 1 
 */
@@ -138,10 +142,15 @@ begin
 		begin
 			offset_index = 0;
 		end
-		
+
+		offset12_pixel_0 <= index_table12_pixel_0[offset_index];
+		offset12_pixel_1 <= index_table12_pixel_1[offset_index];
+		offset12_pixel_lsb1 <= index_table12_pixel_lsb1[offset_index];		
+
 		offset_pixel_0 <= index_table_pixel_0[offset_index];
 		offset_pixel_1 <= index_table_pixel_1[offset_index];
-		offset_pixel_lsb1 <= index_table_pixel_lsb1[offset_index];
+		offset_pixel_lsb1 <= index_table_pixel_lsb1[offset_index];			
+
 end
 
 always @(posedge clk_i )
@@ -192,18 +201,35 @@ begin
 		index_table_pixel_lsb1[3] <= 28;
 
 	
+	
+	
+		index_table12_pixel_0[0] <= 0;
+		index_table12_pixel_0[1] <= 8;
+		index_table12_pixel_0[2] <= 0;
+		index_table12_pixel_0[3] <= 0;
 		
-	//	if (packet_type_i == (MIPI_CSI_PACKET_14bRAW & 8'h07))		// for 14bit need to wait for 3 sample while 12bit and 10bit only need 1 sample delay
-	//	begin
-	//		idle_count <= 3'd2;
-	//	end
-	//	else
-	//	begin 
+		index_table12_pixel_1[0] <= 8;
+		index_table12_pixel_1[1] <= 16;
+		index_table12_pixel_1[2] <= 0;
+		index_table12_pixel_1[3] <= 0;
+		
+		index_table12_pixel_lsb1[0] <= 16;
+		index_table12_pixel_lsb1[1] <= 24;
+		index_table12_pixel_lsb1[2] <= 0;
+		index_table12_pixel_lsb1[3] <= 0;
+
+		
+		
+		if (packet_type_i == (MIPI_CSI_PACKET_14bRAW & 8'h07))		// for 14bit need to wait for 3 sample while 12bit and 10bit only need 1 sample delay
+		begin
+			idle_count <= 3'd2;
+		end
+		else 
+		begin 
 			idle_count <= 3'b0;	//need to be zero to wait for 1 sample after data become valid	
-	//	end
+		end
 		
 		output_valid_reg <= 1'h0;
-		offset_factor_reg <= offset_factor;
 		burst_length_reg <= burst_length;
 		idle_length_reg <= idle_length;
 		packet_type_reg <= packet_type_i;
