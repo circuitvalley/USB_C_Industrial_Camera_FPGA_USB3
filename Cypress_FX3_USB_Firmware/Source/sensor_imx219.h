@@ -4,7 +4,7 @@
 
 #include <cyu3types.h>
 #include <stdbool.h>
-
+#include "sensor_imx219.h"
 
 #define SENSOR_ADDR_WR 0x20             /* Slave address used to write sensor registers. */
 #define SENSOR_ADDR_RD 0x21             /* Slave address used to read from sensor registers. */
@@ -156,7 +156,53 @@ typedef struct image_sensor_config_s {
 	imgsensor_mode_t mode_3280x2464_7;
 } image_sensor_config_t;
 
+#define LANES 2
 
+#if LANES == 2
+#define SENSOR_MODE0_WIDTH							(unsigned int)640
+#define SENSOR_MODE0_HEIGHT							(unsigned int)78
+#define SENSOR_MODE0_FPS							(unsigned int)1000
+
+#define SENSOR_MODE1_WIDTH							(unsigned int)640
+#define SENSOR_MODE1_HEIGHT							(unsigned int)480
+#define SENSOR_MODE1_FPS							(unsigned int)200
+
+#define SENSOR_MODE2_WIDTH							(unsigned int)1280
+#define SENSOR_MODE2_HEIGHT							(unsigned int)720
+#define SENSOR_MODE2_FPS							(unsigned int)60
+
+#define SENSOR_MODE3_WIDTH							(unsigned int)1920
+#define SENSOR_MODE3_HEIGHT							(unsigned int)1080
+#define SENSOR_MODE3_FPS							(unsigned int)30
+
+#define SENSOR_MODE4_WIDTH							(unsigned int)3280
+#define SENSOR_MODE4_HEIGHT							(unsigned int)2464
+#define SENSOR_MODE4_MIN							(unsigned int)5
+#define SENSOR_MODE4_FPS							(unsigned int)15
+
+#else
+#define SENSOR_MODE0_WIDTH							(unsigned int)640
+#define SENSOR_MODE0_HEIGHT							(unsigned int)78
+#define SENSOR_MODE0_FPS							(unsigned int)2000
+
+#define SENSOR_MODE1_WIDTH							(unsigned int)640
+#define SENSOR_MODE1_HEIGHT							(unsigned int)480
+#define SENSOR_MODE1_FPS							(unsigned int)400
+
+#define SENSOR_MODE2_WIDTH							(unsigned int)1280
+#define SENSOR_MODE2_HEIGHT							(unsigned int)720
+#define SENSOR_MODE2_FPS							(unsigned int)120
+
+#define SENSOR_MODE3_WIDTH							(unsigned int)1920
+#define SENSOR_MODE3_HEIGHT							(unsigned int)1080
+#define SENSOR_MODE3_FPS							(unsigned int)60
+
+#define SENSOR_MODE4_WIDTH							(unsigned int)3280
+#define SENSOR_MODE4_HEIGHT							(unsigned int)2464
+#define SENSOR_MODE4_MIN							(unsigned int)10
+#define SENSOR_MODE4_FPS							(unsigned int)30
+
+#endif
 
 
 typedef struct imx219_reg_s {

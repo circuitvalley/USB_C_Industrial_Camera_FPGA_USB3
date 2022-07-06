@@ -70,8 +70,8 @@ static const imx219_reg_t mode_default[]={	//default register settings, Resoluti
 		 {0x4793,				0x10},
 		 {0x4797,				0x0E},
 		 {0x479B,				0x0E},
-		 {REG_TP_RED_MSB,		0x03},
-		 {REG_TP_RED_LSB,		0xFF},
+		 {REG_TP_RED_MSB,		0x00},
+		 {REG_TP_RED_LSB,		0x00},
 		 {REG_TP_GREEN_MSB, 	0x00},
 		 {REG_TP_GREEN_LSB,		0x00},
 		 {REG_TP_BLUE_MSB,		0x00},
@@ -102,7 +102,7 @@ static image_sensor_config_t sensor_config_2LANE = {
 
     .mode_640x480_30 = {  //200Mhz 2Lane 311040 312000
 		.pix_clk_mul = 0x2E,
-		.pix_clk_div = 0x4,
+		.pix_clk_div = 0x4, //only 4 or 5 or 8 or 10
 		.integration = 1725 - 4,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
 		.gain = 0x70,
 		.linelength = 3448, 	//Warning! This value need to be either 0xD78 or 0xDE7 regardless of frame size and FPS, other values will result undefined and ununderstanable issues in image
@@ -133,7 +133,6 @@ static image_sensor_config_t sensor_config_2LANE = {
 		.binning = 2,
 		.test_pattern = 0
 	},
-
 
     .mode_1280x720_30 = {  //200Mhz 2 lane
 		.pix_clk_mul = 0x2E,
@@ -169,7 +168,6 @@ static image_sensor_config_t sensor_config_2LANE = {
 		.test_pattern = 0
 	},
 
-
     .mode_1920x1080_30 = {		//200Mhz 2Lane 2082240
 		.pix_clk_mul = 0x20,
 		.pix_clk_div = 0x4,
@@ -187,7 +185,6 @@ static image_sensor_config_t sensor_config_2LANE = {
 		.test_pattern = 0
 	},
 
-
 	.mode_640x128_600 = {	//200Mhz 2LANE  82944
 		.pix_clk_mul = 0x2D,
 		.pix_clk_div = 0x4,
@@ -204,8 +201,6 @@ static image_sensor_config_t sensor_config_2LANE = {
 		.binning = 2,
 		.test_pattern = 0
 	},
-
-
 
     .mode_640x80_900 = {	//200Mhz 2Lane 51840
 		.pix_clk_mul = 0x2D,
@@ -238,10 +233,8 @@ static image_sensor_config_t sensor_config_2LANE = {
 		.width = 3280,
 		.height = 2464,
 		.binning = 0,
-		.test_pattern = 1
+		.test_pattern = 0
 	},
-
-
 
 };
 
@@ -251,7 +244,7 @@ static image_sensor_config_t sensor_config_4LANE = {
 
 	.mode_640x480_30 = {
 		.pix_clk_mul = 0x53,
-		.pix_clk_div = 0x4,
+		.pix_clk_div = 0x4, //only 4 or 5 or 8 or 10
 		.integration = 3209 - 4,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
 		.gain = 0x70,
 		.linelength = 3448, 	//Warning! This value need to be either 0xD78 or 0xDE7 regardless of frame size and FPS, other values will result undefined and ununderstanable issues in image
@@ -564,7 +557,7 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 			}
 		}
 		break;
-		case FRAME_3280x2462:
+		case FRAME_3280x2464:
 		{
 			if (interval == INTERVAL_7)
 			{
@@ -706,7 +699,7 @@ uint16_t sensor_get_min_exposure (void)
 
 uint16_t sensor_get_max_exposure (void)
 {
-	return sensor_config->mode_3280x2464_15.integration;
+	return selected_img_mode->integration;
 }
 
 uint16_t sensor_get_def_exposure (void)
