@@ -6,6 +6,9 @@
 #include <stdbool.h>
 #include "sensor_imx219.h"
 
+#define LANES 2
+
+
 #define SENSOR_ADDR_WR 0x20             /* Slave address used to write sensor registers. */
 #define SENSOR_ADDR_RD 0x21             /* Slave address used to read from sensor registers. */
 #define I2C_SLAVEADDR_MASK 0xFE         /* Mask to get actual I2C slave address value without direction bit. */
@@ -133,30 +136,11 @@ typedef struct imgsensor_mode_struct_s {
 	uint16_t 	height;
 	uint16_t 	framerate;
 	uint8_t 	binning;
+	uint8_t 	fps;
 	uint8_t		test_pattern;
 } imgsensor_mode_t;
 
 
-/* SENSOR PRIVATE STRUCT FOR CONSTANT*/
-typedef struct image_sensor_config_s {
-	uint8_t 	sensor_mode;
-
-	imgsensor_mode_t mode_640x480_30;		//640x480 30fps
-	imgsensor_mode_t mode_1280x720_30;		//1280x720 30fps
-	imgsensor_mode_t mode_1280x720_60;		//1280x720 60fps
-	imgsensor_mode_t mode_1280x720_120;		//1280x720 120fps
-	imgsensor_mode_t mode_1920x1080_30;		//1920x1080 30fps
-	imgsensor_mode_t mode_1920x1080_60;		//1920x1080 60fps
-	imgsensor_mode_t mode_640x480_200;
-	imgsensor_mode_t mode_640x128_682;
-	imgsensor_mode_t mode_640x128_600;
-	imgsensor_mode_t mode_640x80_900;
-	imgsensor_mode_t mode_640x80_1000;
-	imgsensor_mode_t mode_3280x2464_15;
-	imgsensor_mode_t mode_3280x2464_7;
-} image_sensor_config_t;
-
-#define LANES 2
 
 #if LANES == 2
 #define SENSOR_MODE0_WIDTH							(unsigned int)640
@@ -177,7 +161,7 @@ typedef struct image_sensor_config_s {
 
 #define SENSOR_MODE4_WIDTH							(unsigned int)3280
 #define SENSOR_MODE4_HEIGHT							(unsigned int)2464
-#define SENSOR_MODE4_MIN							(unsigned int)5
+#define SENSOR_MODE4_FPS_MIN							(unsigned int)5
 #define SENSOR_MODE4_FPS							(unsigned int)15
 
 #else
@@ -199,7 +183,7 @@ typedef struct image_sensor_config_s {
 
 #define SENSOR_MODE4_WIDTH							(unsigned int)3280
 #define SENSOR_MODE4_HEIGHT							(unsigned int)2464
-#define SENSOR_MODE4_MIN							(unsigned int)10
+#define SENSOR_MODE4_FPS_MIN							(unsigned int)10
 #define SENSOR_MODE4_FPS							(unsigned int)30
 
 #endif

@@ -13,7 +13,8 @@
 #include <cyu3socket.h>
 
 #include "uvc.h"
-#include "sensor_imx219.h"
+//#include "sensor_imx219.h"
+#include "sensor_imx477.h"
 #include "camera_ptzcontrol.h"
 #include "cyfxgpif2config.h"
 #include "uvc_settings.h"
@@ -1430,7 +1431,7 @@ UVCHandleProcessingUnitRqts (
         		{
         			exposure_val = CY_U3P_MAKEWORD(glEp0Buffer[1], glEp0Buffer[0]);
 
-       				sensor_set_exposure (exposure_val);
+       				//sensor_set_exposure (exposure_val);
         		}
         		break;
         	default:
