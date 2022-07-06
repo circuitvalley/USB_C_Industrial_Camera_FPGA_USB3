@@ -9,79 +9,64 @@
 #define UVC_SETTINGS_H_
 
 
+#include "sensor_imx477.h" 	//Current driver state allow one sensor file to be included at once.
+//#include "sensor_imx219.h"
+
 #define WBVAL(x) (x & 0xFF),((x >> 8) & 0xFF)
 #define DBVAL(x) (x & 0xFF),((x >> 8) & 0xFF),((x >> 16) & 0xFF),((x >> 24) & 0xFF)
 
-#define UVC_WIDTH                                     (unsigned int)3280
-#define UVC_HEIGHT                                    (unsigned int)2462
+#define UVC_MODE0_WIDTH								(unsigned int)SENSOR_MODE0_WIDTH
+#define UVC_MODE0_HEIGHT							(unsigned int)SENSOR_MODE0_HEIGHT
+#define UVC_MODE0_FPS								(unsigned int)SENSOR_MODE0_FPS
+#define MIN_MODE0_BIT_RATE							(unsigned long)(UVC_MODE0_WIDTH*UVC_MODE0_HEIGHT*16*UVC_MODE0_FPS) //YUY2 4byte per 2 pixel
+#define MAX_MODE0_BIT_RATE							(unsigned long)(UVC_MODE0_WIDTH*UVC_MODE0_HEIGHT*16*UVC_MODE0_FPS)
+#define MAX_MODE0_FRAME_SIZE						(unsigned long)(UVC_MODE0_WIDTH*UVC_MODE0_HEIGHT*2)//YUY2 4byte per 2 pixel
+#define INTERVAL_MODE0								(unsigned long)(10000000/UVC_MODE0_FPS)
 
-#define CAM_FPS_1000                                  1000
-#define CAM_FPS_682                                   682
-#define CAM_FPS_200                                   200
-#define CAM_FPS_120                                   120
-#define CAM_FPS_60                                    60
-#define CAM_FPS_30                                    30
-#define CAM_FPS_15                                    15
-#define CAM_FPS_7                                     7
+#define UVC_MODE1_WIDTH								(unsigned int)SENSOR_MODE1_WIDTH
+#define UVC_MODE1_HEIGHT							(unsigned int)SENSOR_MODE1_HEIGHT
+#define UVC_MODE1_FPS								(unsigned int)SENSOR_MODE1_FPS
+#define MIN_MODE1_BIT_RATE							(unsigned long)(UVC_MODE1_WIDTH*UVC_MODE1_HEIGHT*16*UVC_MODE1_FPS) //YUY2 4byte per 2 pixel
+#define MAX_MODE1_BIT_RATE							(unsigned long)(UVC_MODE1_WIDTH*UVC_MODE1_HEIGHT*16*UVC_MODE1_FPS)
+#define MAX_MODE1_FRAME_SIZE						(unsigned long)(UVC_MODE1_WIDTH*UVC_MODE1_HEIGHT*2)//YUY2 4byte per 2 pixel
+#define INTERVAL_MODE1								(unsigned long)(10000000/UVC_MODE1_FPS)
 
-#define INTERVAL_1000								(unsigned long)(10000000/CAM_FPS_1000)
-#define INTERVAL_682								(unsigned long)(10000000/CAM_FPS_682)
-#define INTERVAL_200								(unsigned long)(10000000/CAM_FPS_200)
-#define INTERVAL_120								(unsigned long)(10000000/CAM_FPS_120)
-#define INTERVAL_60									(unsigned long)(10000000/CAM_FPS_60)
-#define INTERVAL_30									(unsigned long)(10000000/CAM_FPS_30)
-#define INTERVAL_15									(unsigned long)(10000000/CAM_FPS_15)
-#define INTERVAL_7									(unsigned long)(10000000/CAM_FPS_7)
+#define UVC_MODE2_WIDTH								(unsigned int)SENSOR_MODE2_WIDTH
+#define UVC_MODE2_HEIGHT							(unsigned int)SENSOR_MODE2_HEIGHT
+#define UVC_MODE2_FPS								(unsigned int)SENSOR_MODE2_FPS
+#define MIN_MODE2_BIT_RATE							(unsigned long)(UVC_MODE2_WIDTH*UVC_MODE2_HEIGHT*16*UVC_MODE2_FPS) //YUY2 4byte per 2 pixel
+#define MAX_MODE2_BIT_RATE							(unsigned long)(UVC_MODE2_WIDTH*UVC_MODE2_HEIGHT*16*UVC_MODE2_FPS)
+#define MAX_MODE2_FRAME_SIZE						(unsigned long)(UVC_MODE2_WIDTH*UVC_MODE2_HEIGHT*2)//YUY2 4byte per 2 pixel
+#define INTERVAL_MODE2								(unsigned long)(10000000/UVC_MODE2_FPS)
 
-//640x480 supports 30 and 200FPS
-#define UVC_WIDTH_640								(unsigned int)640
-#define UVC_HEIGHT_126								(unsigned int)126
-#define MIN_BIT_RATE_640x126						(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_126*16*CAM_FPS_682) //YUY2 4byte per 2 pixel
-#define MAX_BIT_RATE_640x126						(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_126*16*CAM_FPS_682)
-#define MAX_FRAME_SIZE_640x126						(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_126*2)//YUY2 4byte per 2 pixel
+#define UVC_MODE3_WIDTH								(unsigned int)SENSOR_MODE3_WIDTH
+#define UVC_MODE3_HEIGHT							(unsigned int)SENSOR_MODE3_HEIGHT
+#define UVC_MODE3_FPS								(unsigned int)SENSOR_MODE3_FPS
+#define MIN_MODE3_BIT_RATE							(unsigned long)(UVC_MODE3_WIDTH*UVC_MODE3_HEIGHT*16*UVC_MODE3_FPS) //YUY2 4byte per 2 pixel
+#define MAX_MODE3_BIT_RATE							(unsigned long)(UVC_MODE3_WIDTH*UVC_MODE3_HEIGHT*16*UVC_MODE3_FPS)
+#define MAX_MODE3_FRAME_SIZE						(unsigned long)(UVC_MODE3_WIDTH*UVC_MODE3_HEIGHT*2)//YUY2 4byte per 2 pixel
+#define INTERVAL_MODE3								(unsigned long)(10000000/UVC_MODE3_FPS)
 
-#define UVC_WIDTH_640								(unsigned int)640
-#define UVC_HEIGHT_78								(unsigned int)78
-#define MIN_BIT_RATE_640x78							(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_78*16*CAM_FPS_1000) //YUY2 4byte per 2 pixel
-#define MAX_BIT_RATE_640x78							(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_78*16*CAM_FPS_1000)
-#define MAX_FRAME_SIZE_640x78						(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_78*2)//YUY2 4byte per 2 pixel
+#define UVC_MODE4_WIDTH								(unsigned int)SENSOR_MODE4_WIDTH
+#define UVC_MODE4_HEIGHT							(unsigned int)SENSOR_MODE4_HEIGHT
+#define UVC_MODE4_FPS_MIN							(unsigned int)SENSOR_MODE4_FPS_MIN
+#define UVC_MODE4_FPS								(unsigned int)SENSOR_MODE4_FPS
+#define MIN_MODE4_BIT_RATE							(unsigned long)(UVC_MODE4_WIDTH*UVC_MODE4_HEIGHT*16*UVC_MODE4_FPS_MIN) //YUY2 4byte per 2 pixel
+#define MAX_MODE4_BIT_RATE							(unsigned long)(UVC_MODE4_WIDTH*UVC_MODE4_HEIGHT*16*UVC_MODE4_FPS)
+#define MAX_MODE4_FRAME_SIZE						(unsigned long)(UVC_MODE4_WIDTH*UVC_MODE4_HEIGHT*2)//YUY2 4byte per 2 pixel
+#define INTERVAL_MODE4_MIN							(unsigned long)(10000000/UVC_MODE4_FPS_MIN)
+#define INTERVAL_MODE4								(unsigned long)(10000000/UVC_MODE4_FPS)
 
-#define UVC_WIDTH_640								(unsigned int)650
-#define UVC_HEIGHT_480								(unsigned int)480
-#define MIN_BIT_RATE_640x480						(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_480*16*CAM_FPS_30) //YUY2 4byte per 2 pixel
-#define MAX_BIT_RATE_640x480						(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_480*16*CAM_FPS_200)
-#define MAX_FRAME_SIZE_640x480						(unsigned long)(UVC_WIDTH_640*UVC_HEIGHT_480*2)//YUY2 4byte per 2 pixel
-
-#define UVC_WIDTH_1280								(unsigned int)1290
-#define UVC_HEIGHT_720								(unsigned int)720
-#define MIN_BIT_RATE_1280x720						(unsigned long)(UVC_WIDTH_1280*UVC_HEIGHT_720*16*CAM_FPS_30)
-#define MAX_BIT_RATE_1280x720						(unsigned long)(UVC_WIDTH_1280*UVC_HEIGHT_720*16*CAM_FPS_120)
-#define MAX_FRAME_SIZE_1280x720						(unsigned long)(UVC_WIDTH_1280*UVC_HEIGHT_720*2)
-
-#define UVC_WIDTH_1920								(unsigned int)1930
-#define UVC_HEIGHT_1080								(unsigned int)1080
-#define MIN_BIT_RATE_1920x1080						(unsigned long)(UVC_WIDTH_1920*UVC_HEIGHT_1080*16*CAM_FPS_30)
-#define MAX_BIT_RATE_1920x1080						(unsigned long)(UVC_WIDTH_1920*UVC_HEIGHT_1080*16*CAM_FPS_60)
-#define MAX_FRAME_SIZE_1920x1080					(unsigned long)(UVC_WIDTH_1920*UVC_HEIGHT_1080*2)
-
-#define UVC_WIDTH_3280								(unsigned int)3290
-#define UVC_HEIGHT_2462								(unsigned int)2464
-#define MIN_BIT_RATE_3280x2462						(unsigned long)(UVC_WIDTH_3280*UVC_HEIGHT_2462*16*CAM_FPS_15)
-#define MAX_BIT_RATE_3280x2462						(unsigned long)(UVC_WIDTH_3280*UVC_HEIGHT_2462*16*CAM_FPS_15)
-#define MAX_FRAME_SIZE_3280x2462					(unsigned long)(UVC_WIDTH_3280*UVC_HEIGHT_2462*2)
-
-
-#define MAX_FRAME_SIZE                              (unsigned long)(UVC_WIDTH_3280*UVC_HEIGHT_2462*2)//yuy2
-
+#define INTERVAL_30									(unsigned long)(10000000/30)
+#define MAX_FRAME_SIZE                              (unsigned long)(UVC_MODE4_WIDTH*UVC_MODE4_HEIGHT*2)//yuy2
 
 typedef enum
 {
-	FRAME_640x480 = 1,
-	FRAME_1280x720,
-	FRAME_1920x1080,
-	FRAME_3280x2462,
-	FRMAE_640x128,
-	FRMAE_640x80,
+	FRAME_MODE0 = 1,
+	FRAME_MODE1,
+	FRAME_MODE2,
+	FRAME_MODE3,
+	FRAME_MODE4,
 }frame_t;
 
 #endif /* UVC_SETTINGS_H_ */
