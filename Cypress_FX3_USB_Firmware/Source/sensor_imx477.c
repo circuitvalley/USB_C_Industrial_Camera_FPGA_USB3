@@ -334,7 +334,7 @@ static const imx477_reg_t mode_default[]={	//default register settings, Resoluti
 
 
 /* 12 mpix */
-static const imx477_reg_t mode_4056x3040_regs[] = {
+static  imx477_reg_t mode_4056x3040_regs[] = {
 	{REG_LINE_LEN_MSB, 0x5D},
 	{REG_LINE_LEN_LSB, 0xC0},
 	{REG_X_ADD_STA_MSB, 0x00},
@@ -448,7 +448,7 @@ static const imx477_reg_t mode_4056x3040_regs[] = {
 
 
 /* 1080p cropped mode */
-static const imx477_reg_t mode_2028x1080_regs[] = {
+static imx477_reg_t mode_2028x1080_regs[] = {
 	{REG_LINE_LEN_MSB, 0x31},
 	{REG_LINE_LEN_LSB, 0xc4},
 	{REG_X_ADD_STA_MSB, 0x00},
@@ -549,7 +549,7 @@ static const imx477_reg_t mode_2028x1080_regs[] = {
 };
 
 /* 2x2 binned.  */
-static const imx477_reg_t mode_2028x1520_regs[] = {
+static imx477_reg_t mode_2028x1520_regs[] = {
 	{REG_LINE_LEN_MSB, 0x31},
 	{REG_LINE_LEN_LSB, 0xc4},
 	{REG_X_ADD_STA_MSB, 0x00},
@@ -650,7 +650,7 @@ static const imx477_reg_t mode_2028x1520_regs[] = {
 };
 
 //4x4 binning 10bit
-static const imx477_reg_t mode_1332x990_regs[] = {
+static imx477_reg_t mode_1332x990_regs[] = {
 		{0x420b, 0x01},
 		{0x990c, 0x00},
 		{0x990d, 0x08},
@@ -781,62 +781,94 @@ static const imx477_reg_t mode_1332x990_regs[] = {
 
 imgsensor_mode_t *sensor_config;
 
-static imgsensor_mode_t sensor_config_2Lane_10bit[] = {
-	{
-		.sensor_mode = 1,
-		.integration = 0x7E,
-		.width = 1332,
-		.height = 990,
-		.fps = 120,
-		.gain = 0,
-		.test_pattern =0,
-		.reg_list  = {
-				.num_of_regs = _countof(mode_1332x990_regs),
-				.regs = mode_1332x990_regs,
-		}
-	},
-};
 
 static imgsensor_mode_t sensor_config_2Lane_12bit[] = {
-	{
-		.sensor_mode = 1,
-		.width = 1920,
-		.height = 1080,
-        .frame_length= 1167, //decided frame rate along with mode regs
-		.fps = 60,
-		.gain = 0,
-		.test_pattern =0,
-		.reg_list  = {
-				.num_of_regs = _countof(mode_2028x1080_regs),
-				.regs = mode_2028x1080_regs,
-		}
-	},
-    {
-		.sensor_mode = 1,
-		.width = 2028,
-		.height = 1520,
-		.frame_length= 1666, //decided frame rate along with mode regs
-		.fps = 35,
-		.gain = 0,
-		.test_pattern =0,
-		.reg_list  = {
-				.num_of_regs = _countof(mode_2028x1520_regs),
-				.regs = mode_2028x1520_regs,
-		}
-	},
-    {
-		.sensor_mode = 1,
-		.width = 4056,
-		.height = 3040,
-		.frame_length= 3104, //decided frame rate along with mode regs
-		.fps = 10,
-		.gain = 0,
-		.test_pattern =0,
-		.reg_list  = {
-				.num_of_regs = _countof(mode_4056x3040_regs),
-				.regs = mode_4056x3040_regs,
-		}
-	},
+		{
+						.sensor_mode = 1,
+						.integration = 0x7E,
+						.width = 640,
+						.height = 480,
+						.fps = 100,
+						.gain = 0,			//TODO: find 640x480 Reg list, For now just place holder
+						.test_pattern =0,
+						.bits = 10,
+						.reg_list  = {
+								.num_of_regs = _countof(mode_1332x990_regs),
+								.regs = mode_1332x990_regs,
+						}
+		},
+		{
+				.sensor_mode = 1,
+				.integration = 0x7E,
+				.width = 1332,
+				.height = 990,
+				.fps = 100,
+				.gain = 0,
+				.test_pattern =0,
+				.bits = 10,
+				.reg_list  = {
+						.num_of_regs = _countof(mode_1332x990_regs),
+						.regs = mode_1332x990_regs,
+				}
+		},
+		{
+				.sensor_mode = 1,
+				.width = 1920,
+				.height = 1080,
+				.frame_length= 1167, //decided frame rate along with mode regs
+				.fps = 60,
+				.gain = 0,
+				.bits = 12,
+				.test_pattern =0,
+				.reg_list  = {
+						.num_of_regs = _countof(mode_2028x1080_regs),
+						.regs = mode_2028x1080_regs,
+				}
+		},
+		{
+				.sensor_mode = 1,
+				.width = 2028,
+				.height = 1520,
+				.frame_length= 1666, //decided frame rate along with mode regs
+				.fps = 35,
+				.gain = 0,
+				.bits = 12,
+				.test_pattern =0,
+				.reg_list  = {
+						.num_of_regs = _countof(mode_2028x1520_regs),
+						.regs = mode_2028x1520_regs,
+				}
+		},
+		{
+				.sensor_mode = 1,
+				.width = 4056,
+				.height = 3040,
+				.frame_length= 3104, //decided frame rate along with mode regs
+				.fps = 5,			//TODO change Frame length for 5 FPS
+				.gain = 0,
+				.bits = 12,
+				.test_pattern =0,
+				.reg_list  = {
+						.num_of_regs = _countof(mode_4056x3040_regs),
+						.regs = mode_4056x3040_regs,
+				}
+		},
+
+		{
+				.sensor_mode = 1,
+				.width = 4056,
+				.height = 3040,
+				.frame_length= 3104, //decided frame rate along with mode regs
+				.fps = 10,
+				.gain = 0,
+				.bits = 12,
+				.test_pattern =0,
+				.reg_list  = {
+						.num_of_regs = _countof(mode_4056x3040_regs),
+						.regs = mode_4056x3040_regs,
+				}
+		},
+
 
 };
 
@@ -933,73 +965,50 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 {
 	switch(frame_index)
 	{
-		case FRAME_640x480:
+		case FRAME_MODE0:
 		{
-			if (interval == INTERVAL_30)
+			if (interval == INTERVAL_MODE0)
 			{
-				selected_img_mode = &sensor_config[0];
-			}
-			else if(interval == INTERVAL_200)
-			{
-				selected_img_mode = &sensor_config[0];
-			}
-
-		}
-		break;
-		case FRAME_1280x720:
-		{
-			if (interval == INTERVAL_30)
-			{
-				selected_img_mode = &sensor_config[0];
-			}
-			else if(interval == INTERVAL_60)
-			{
-				selected_img_mode = &sensor_config[0];
-			}
-			else if(interval == INTERVAL_120)
-			{
-				//selected_img_mode = &sensor_config->mode_1280x720_120;
 				selected_img_mode = &sensor_config[0];
 			}
 		}
 		break;
-		case FRAME_1920x1080:
+		case FRAME_MODE1:
 		{
-			if (interval == INTERVAL_30)
+			if (interval == INTERVAL_MODE1)
 			{
-				selected_img_mode = &sensor_config[0];
-			}
-			else if(interval == INTERVAL_60)
-			{
-				//selected_img_mode = &sensor_config->mode_1920x1080_60;
-				selected_img_mode = &sensor_config[0];
-
+				selected_img_mode = &sensor_config[1];
 			}
 		}
 		break;
-		case FRAME_3280x2464:
+		case FRAME_MODE2:
 		{
-			if (interval == INTERVAL_7)
+			if (interval == INTERVAL_MODE2)
+			{
+				selected_img_mode = &sensor_config[2];
+			}
+		}
+		break;
+		case FRAME_MODE3:
+		{
+			if (interval == INTERVAL_MODE3)
 			{
 				//selected_img_mode = &sensor_config->mode_3280x2464_15;
-				selected_img_mode = &sensor_config[0];
+				selected_img_mode = &sensor_config[3];
 			}
 		}
 		break;
-		case FRMAE_640x128:
+		case FRAME_MODE4:
 		{
-			if (interval == INTERVAL_682)
+			if (interval == INTERVAL_MODE4_MIN)
 			{
-				selected_img_mode = &sensor_config[0];
+				selected_img_mode = &sensor_config[4];
 			}
-		}
-		break;
-		case FRMAE_640x80:
-		{
-			if (interval == INTERVAL_1000)
+			else if (interval == INTERVAL_MODE4)
 			{
-				selected_img_mode = &sensor_config[0];
+				selected_img_mode = &sensor_config[5];
 			}
+
 		}
 		break;
 		default:
@@ -1081,7 +1090,7 @@ void SensorInit (void)
 		//CyU3PDebugPrint (4, "Reg 0x%x val 0x%x\n", (mode_default + i)->address, (mode_default + i)->val);
 		sensor_i2c_write((mode_default + i)->address, (mode_default + i)->val);
 	}
-	sensor_config = &sensor_config_2Lane_10bit;
+	sensor_config = sensor_config_2Lane_12bit;
 	sensor_configure_mode(&sensor_config[0]);
 }
 

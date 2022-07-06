@@ -200,6 +200,54 @@
 #define REG_DOL_CSI_DT_FMT_L_3ND	0x00FF
 #define REG_DOL_CONST				0xE013
 
+
+#define LANES 2
+
+#if LANES == 2
+#define SENSOR_MODE0_WIDTH							(unsigned int)640
+#define SENSOR_MODE0_HEIGHT							(unsigned int)480
+#define SENSOR_MODE0_FPS							(unsigned int)1000
+
+#define SENSOR_MODE1_WIDTH							(unsigned int)1332
+#define SENSOR_MODE1_HEIGHT							(unsigned int)990
+#define SENSOR_MODE1_FPS							(unsigned int)100
+
+#define SENSOR_MODE2_WIDTH							(unsigned int)2028
+#define SENSOR_MODE2_HEIGHT							(unsigned int)1080
+#define SENSOR_MODE2_FPS							(unsigned int)50
+
+#define SENSOR_MODE3_WIDTH							(unsigned int)2028
+#define SENSOR_MODE3_HEIGHT							(unsigned int)1520
+#define SENSOR_MODE3_FPS							(unsigned int)35
+
+#define SENSOR_MODE4_WIDTH							(unsigned int)4056
+#define SENSOR_MODE4_HEIGHT							(unsigned int)3040
+#define SENSOR_MODE4_FPS_MIN						(unsigned int)5
+#define SENSOR_MODE4_FPS							(unsigned int)10
+#else
+
+#define SENSOR_MODE0_WIDTH							(unsigned int)640
+#define SENSOR_MODE0_HEIGHT							(unsigned int)78
+#define SENSOR_MODE0_FPS							(unsigned int)1000
+
+#define SENSOR_MODE1_WIDTH							(unsigned int)1332
+#define SENSOR_MODE1_HEIGHT							(unsigned int)990
+#define SENSOR_MODE1_FPS							(unsigned int)200
+
+#define SENSOR_MODE2_WIDTH							(unsigned int)2028
+#define SENSOR_MODE2_HEIGHT							(unsigned int)1080
+#define SENSOR_MODE2_FPS							(unsigned int)100
+
+#define SENSOR_MODE3_WIDTH							(unsigned int)2028
+#define SENSOR_MODE3_HEIGHT							(unsigned int)1520
+#define SENSOR_MODE3_FPS							(unsigned int)70
+
+#define SENSOR_MODE4_WIDTH							(unsigned int)4056
+#define SENSOR_MODE4_HEIGHT							(unsigned int)3040
+#define SENSOR_MODE4_FPS_MIN						(unsigned int)10
+#define SENSOR_MODE4_FPS							(unsigned int)20
+#endif
+
 typedef enum{
 	IMGSENSOR_MODE_INIT,
 	IMGSENSOR_MODE_PREVIEW,
@@ -236,6 +284,7 @@ typedef struct imgsensor_mode_struct_s {
     uint16_t    frame_length;
 	uint16_t	fps;
 	uint16_t 	gain;
+	uint8_t 	bits;
 	uint8_t		test_pattern;
 	imx477_reg_list_t reg_list;
 } imgsensor_mode_t;
