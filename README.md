@@ -45,16 +45,25 @@ Tests
 640x480   200 FPS Binned 4x4</br>
 
 
+- 4 Lane 10 bit IMX219</br>
+3280x2464 30 FPS</br>
+1280x720  240 FPS</br>
+1920x1080 120 FPS</br>
+640x480   400 FPS</br>
+640x128   1300 FPS</br>
+640x80    2000 FPS</br>
 
-2 Lane 10 bit IMX219</br>
-3280x2464 7 FPS</br>
-1280x720  30 FPS</br>
+
+- 2 Lane 10 bit IMX219</br>
+3280x2464 15 FPS</br>
 1280x720  60 FPS</br>
-1920x1080 30 FPS</br>
+1280x720  120 FPS</br>
+1920x1080 60 FPS</br>
 640x480   30 FPS</br>
 640x480   200 FPS</br>
 640x128   600 FPS</br>
 640x80    900 FPS</br>
+
 
 
 
