@@ -124,6 +124,7 @@ typedef struct imgsensor_mode_struct_s {
 	uint8_t 	mirror;
 	uint16_t 	integration;
 	uint16_t 	gain;
+	uint16_t	gain_max;
 
 	uint16_t 	linelength;
 	uint16_t 	framelength;
@@ -198,6 +199,7 @@ typedef struct imx219_reg_s {
 void SensorInit (void);
 void SensorReset (void);
 uint8_t SensorI2cBusTest (void);
+uint16_t getMaxBrightness(void);
 uint8_t SensorGetBrightness (void);
 void SensorSetBrightness (uint8_t input);
 uint16_t sensor_get_exposure (void);

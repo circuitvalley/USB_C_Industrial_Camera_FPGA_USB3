@@ -103,6 +103,7 @@ static imgsensor_mode_t sensor_config_2LANE[] = {
 		.pix_clk_div = 0x4, //only 4 or 5 or 8 or 10
 		.integration = 258 - 4,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
 		.gain = 0x70,
+		.gain_max = 0xFF,
 		.linelength = 3448, 	//Warning! This value need to be either 0xD78 or 0xDE7 regardless of frame size and FPS, other values will result undefined and ununderstanable issues in image
 		.framelength = 258,  //decided how long is frame, basically frame rate with pix clock, it has second priority to integration time. absolute minimum is 255 for imx219
 		.startx = 1000,
@@ -123,6 +124,7 @@ static imgsensor_mode_t sensor_config_2LANE[] = {
 		.pix_clk_div = 0x4,
 		.integration = 862 - 4,
 		.gain = 0x80,
+		.gain_max = 0xFF,
 		.linelength = 0xD78,
 		.framelength = 862,
 		.startx = 0x2A8,
@@ -141,6 +143,7 @@ static imgsensor_mode_t sensor_config_2LANE[] = {
 		.pix_clk_div = 0x4,
 		.integration = 1200 - 4,
 		.gain = 0x80,
+		.gain_max = 0xFF,
 		.linelength = 0xD78,
 		.framelength = 1200,
 		.startx = 0x2A8,
@@ -160,6 +163,7 @@ static imgsensor_mode_t sensor_config_2LANE[] = {
 		.pix_clk_div = 0x4,
 		.integration = 56 - 4,
 		.gain = 200,
+		.gain_max = 0xFF,
 		.linelength = 0xD78,
 		.framelength = 56,
 		.startx = 1320,
@@ -178,6 +182,7 @@ static imgsensor_mode_t sensor_config_2LANE[] = {
 		.pix_clk_div = 0x4,
 		.integration = 2670 - 4,
 		.gain = 200,
+		.gain_max = 0xFF,
 		.linelength = 0xD78, //3448
 		.framelength = 2670,
 		.startx = 0,
@@ -196,6 +201,7 @@ static imgsensor_mode_t sensor_config_2LANE[] = {
 		.pix_clk_div = 0x4,
 		.integration = 2670 - 4,
 		.gain = 200,
+		.gain_max = 0xFF,
 		.linelength = 0xD78, //3448
 		.framelength = 2670,
 		.startx = 0,
@@ -218,6 +224,7 @@ static imgsensor_mode_t sensor_config_4LANE[] = {
 		.pix_clk_div = 0x4, //only 4 or 5 or 8 or 10
 		.integration = 481 - 4,	//must be < (linelength- 4) to maintain frame rate by framelength or integration time will slow frame rate
 		.gain = 0x70,
+		.gain_max = 0xFF,
 		.linelength = 3448, 	//Warning! This value need to be either 0xD78 or 0xDE7 regardless of frame size and FPS, other values will result undefined and ununderstanable issues in image
 		.framelength = 481,
 		.startx = 1000,
@@ -236,6 +243,7 @@ static imgsensor_mode_t sensor_config_4LANE[] = {
 		.pix_clk_div = 0x4,
 		.integration = 850 - 4,
 		.gain = 0x80,
+		.gain_max = 0xFF,
 		.linelength = 0xD78,
 		.framelength = 850,
 		.startx = 0x2A8,
@@ -254,6 +262,7 @@ static imgsensor_mode_t sensor_config_4LANE[] = {
 		.pix_clk_div = 0x5,
 		.integration = 1237 - 4,
 		.gain = 0x80,
+		.gain_max = 0xFF,
 		.linelength = 0xD78,
 		.framelength = 1237,
 		.startx = 0x2A8,
@@ -271,6 +280,7 @@ static imgsensor_mode_t sensor_config_4LANE[] = {
 		.pix_clk_div = 0x4,
 		.integration = 96 - 4,
 		.gain = 200,
+		.gain_max = 0xFF,
 		.linelength = 0xD78,
 		.framelength = 96,
 		.startx = 1320,
@@ -289,6 +299,7 @@ static imgsensor_mode_t sensor_config_4LANE[] = {
 		.pix_clk_div = 0x5,
 		.integration = 3031 - 4,
 		.gain = 200,
+		.gain_max = 0xFF,
 		.linelength = 0xD78,
 		.framelength = 3031,
 		.startx = 0,
@@ -308,6 +319,7 @@ static imgsensor_mode_t sensor_config_4LANE[] = {
 		.pix_clk_div = 0x5,
 		.integration = 3031 - 4,
 		.gain = 200,
+		.gain_max = 0xFF,
 		.linelength = 0xD78,
 		.framelength = 3031,
 		.startx = 0,
@@ -582,6 +594,11 @@ void SensorInit (void)
 uint8_t SensorGetBrightness (void)
 {
     return selected_img_mode->gain;
+}
+
+uint16_t getMaxBrightness(void)
+{
+	return selected_img_mode->gain_max;
 }
 
 void SensorSetBrightness (uint8_t input)
