@@ -18,6 +18,7 @@
 #include "sensor_imx477.h"
 #include "uvc_settings.h"
 
+imgsensor_mode_t *sensor_config;
 imgsensor_mode_t *selected_img_mode;
 
 static const imx477_reg_t mode_default[]={	//default register settings, Resolution and FPS specific settings will be over written
@@ -911,18 +912,22 @@ static imx477_reg_t mode_640x480_regs[] = {
 		{REG_LINE_LEN_INCLK_LSB, 0xbf},
 };
 
-imgsensor_mode_t *sensor_config;
+
 
 
 static imgsensor_mode_t sensor_config_2Lane[] = {
 		{
 			.sensor_mode = 1,
-			.integration = 0x7E,
+			.integration_def = 500,
+			.integration = 500,
+			.integration_max = 557-22, // From RPI IMX477 driver exp offset is 22
+			.integration_min = 7,
 			.width = 640,
 			.height = 480,
 			.frame_length= 557, //decided frame rate along with mode regs
 			.fps = 200,
-			.gain = 0,
+			.gain = 200,
+			.gain_max = 978,
 			.test_pattern =0,
 			.bits = 10,
 			.reg_list  = {
@@ -932,12 +937,16 @@ static imgsensor_mode_t sensor_config_2Lane[] = {
 		},
 		{
 				.sensor_mode = 1,
-				.integration = 0x7E,
+				.integration_def = 500,
+				.integration = 500,
+				.integration_max = 1115 -22,
+				.integration_min = 7,
 				.width = 1332,
 				.height = 990,
 				.frame_length= 1115, //decided frame rate along with mode regs
 				.fps = 100,
-				.gain = 0,
+				.gain = 200,
+				.gain_max = 978,
 				.test_pattern =0,
 				.bits = 10,
 				.reg_list  = {
@@ -947,11 +956,16 @@ static imgsensor_mode_t sensor_config_2Lane[] = {
 		},
 		{
 				.sensor_mode = 1,
+				.integration_def = 500,
+				.integration = 500,
+				.integration_max = 1167-22,
+				.integration_min = 7,
 				.width = 1920,
 				.height = 1080,
 				.frame_length= 1167, //decided frame rate along with mode regs
 				.fps = 60,
-				.gain = 0,
+				.gain = 200,
+				.gain_max = 978,
 				.bits = 12,
 				.test_pattern =0,
 				.reg_list  = {
@@ -961,11 +975,16 @@ static imgsensor_mode_t sensor_config_2Lane[] = {
 		},
 		{
 				.sensor_mode = 1,
+				.integration_def = 500,
+				.integration = 500,
+				.integration_max = 1666-22,
+				.integration_min = 7,
 				.width = 2028,
 				.height = 1520,
 				.frame_length= 1666, //decided frame rate along with mode regs
 				.fps = 35,
-				.gain = 0,
+				.gain = 200,
+				.gain_max = 978,
 				.bits = 12,
 				.test_pattern =0,
 				.reg_list  = {
@@ -975,11 +994,16 @@ static imgsensor_mode_t sensor_config_2Lane[] = {
 		},
 		{
 				.sensor_mode = 1,
+				.integration_def = 500,
+				.integration = 500,
+				.integration_max = 9312-22,
+				.integration_min = 7,
 				.width = 4056,
 				.height = 3040,
 				.frame_length= 9312, //decided frame rate along with mode regs
 				.fps = 5,
-				.gain = 0,
+				.gain = 200,
+				.gain_max = 978,
 				.bits = 12,
 				.test_pattern =0,
 				.reg_list  = {
@@ -990,11 +1014,16 @@ static imgsensor_mode_t sensor_config_2Lane[] = {
 
 		{
 				.sensor_mode = 1,
+				.integration_def = 500,
+				.integration = 500,
+				.integration_max = 3104-22,
+				.integration_min = 7,
 				.width = 4056,
 				.height = 3040,
 				.frame_length= 3104, //decided frame rate along with mode regs
 				.fps = 10,
-				.gain = 0,
+				.gain = 200,
+				.gain_max = 978,
 				.bits = 12,
 				.test_pattern =0,
 				.reg_list  = {
@@ -1005,6 +1034,7 @@ static imgsensor_mode_t sensor_config_2Lane[] = {
 
 
 };
+
 
 static void SensorI2CAccessDelay (CyU3PReturnStatus_t status)
 {
@@ -1181,17 +1211,10 @@ void sensor_configure_mode(imgsensor_mode_t * mode)
 	sensor_i2c_write(REG_TP_GREENB_LSB, 0x0);
 	sensor_i2c_write(REG_TP_BLUE_MSB, 0x07);
 	sensor_i2c_write(REG_TP_BLUE_LSB, 0xFF);
-	//sensor_i2c_write (REG_COARSE_INTEGRATION_TIME_MSB, (mode->integration >> 8) & 0xFF);
-	//sensor_i2c_write (REG_COARSE_INTEGRATION_TIME_LSB, mode->integration & 0xFF);
-	//sensor_i2c_write (REG_COARSE_INTEGRATION_TIME_MSB, 0);
-	//sensor_i2c_write (REG_COARSE_INTEGRATION_TIME_LSB, 5);
-//	sensor_i2c_write(REG_TP_WIDTH_MSB, GET_WORD_MSB(mode->width));
-//	sensor_i2c_write(REG_TP_WIDTH_LSB, GET_WORD_LSB(mode->width));
-//	sensor_i2c_write(REG_TP_HEIGHT_MSB, GET_WORD_MSB(mode->height));
-//	sensor_i2c_write(REG_TP_HEIGHT_LSB, GET_WORD_LSB(mode->height));
+	sensor_i2c_write(REG_COARSE_INTEGRATION_TIME_MSB, (mode->integration_def >> 8) & 0xFF);
+	sensor_i2c_write(REG_COARSE_INTEGRATION_TIME_LSB, mode->integration_def & 0xFF);
 
-	//camera_stream_on(sensor_config->sensor_mode);
-	camera_stream_on(1);
+	camera_stream_on(selected_img_mode->sensor_mode);
 }
 
 uint8_t	SensorI2cBusTest (void)
@@ -1225,7 +1248,8 @@ void SensorInit (void)
 		sensor_i2c_write((mode_default + i)->address, (mode_default + i)->val);
 	}
 	sensor_config = sensor_config_2Lane;
-	sensor_configure_mode(&sensor_config[0]);
+	selected_img_mode = &sensor_config[4];
+	sensor_configure_mode(selected_img_mode);
 }
 
 uint8_t SensorGetBrightness (void)
@@ -1233,26 +1257,33 @@ uint8_t SensorGetBrightness (void)
     return selected_img_mode->gain;
 }
 
-void SensorSetBrightness (uint8_t input)
+uint16_t getMaxBrightness(void)
+{
+	return selected_img_mode->gain_max;
+}
+
+void SensorSetBrightness (uint16_t input)
 {
 	selected_img_mode->gain = input;
-	sensor_i2c_write (REG_ANA_GAIN_GLOBAL_MSB, input);
-	sensor_i2c_write (REG_ANA_GAIN_GLOBAL_LSB, input);
+	sensor_i2c_write (REG_ANA_GAIN_GLOBAL_MSB, (input >> 8) & 0xFF);
+	sensor_i2c_write (REG_ANA_GAIN_GLOBAL_LSB, input & 0xFF);
+
 }
 
 uint16_t sensor_get_min_exposure (void)
 {
-	return 0;
+	return selected_img_mode->integration_min;
 }
+
 
 uint16_t sensor_get_max_exposure (void)
 {
-	return selected_img_mode->integration;
+	return selected_img_mode->integration_max;
 }
 
 uint16_t sensor_get_def_exposure (void)
 {
-	return selected_img_mode->integration;
+	return selected_img_mode->integration_def;
 }
 
 uint16_t sensor_get_exposure (void)
@@ -1262,10 +1293,11 @@ uint16_t sensor_get_exposure (void)
 
 void sensor_set_exposure (uint16_t integration)
 {
-	if (integration > selected_img_mode->integration)
+	if (integration > selected_img_mode->integration_max)
 	{
-		integration = selected_img_mode->integration;
+		integration = selected_img_mode->integration_max;
 	}
+	selected_img_mode->integration = integration;
 	sensor_i2c_write (REG_COARSE_INTEGRATION_TIME_MSB, (integration >> 8) & 0xFF);
 	sensor_i2c_write (REG_COARSE_INTEGRATION_TIME_LSB, integration & 0xFF);
 }

@@ -276,7 +276,10 @@ typedef struct imx477_reg_list_struct_s {
 }imx477_reg_list_t;
 
 typedef struct imgsensor_mode_struct_s {
+	uint16_t 	integration_def;
 	uint16_t 	integration;
+	uint16_t 	integration_max;
+	uint16_t	integration_min;
 	uint8_t 	mirror;
 	uint8_t 	sensor_mode;
 	uint16_t 	width;
@@ -284,6 +287,7 @@ typedef struct imgsensor_mode_struct_s {
     uint16_t    frame_length;
 	uint16_t	fps;
 	uint16_t 	gain;
+	uint16_t	gain_max;
 	uint8_t 	bits;
 	uint8_t		test_pattern;
 	imx477_reg_list_t reg_list;
@@ -294,7 +298,8 @@ void SensorInit (void);
 void SensorReset (void);
 uint8_t SensorI2cBusTest (void);
 uint8_t SensorGetBrightness (void);
-void SensorSetBrightness (uint8_t input);
+uint16_t getMaxBrightness(void);
+void SensorSetBrightness (uint16_t input);
 uint16_t sensor_get_exposure (void);
 uint16_t sensor_get_max_exposure();
 uint16_t sensor_get_min_exposure();
