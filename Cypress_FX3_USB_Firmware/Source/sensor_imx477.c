@@ -649,6 +649,7 @@ static imx477_reg_t mode_2028x1520_regs[] = {
 	{REG_LINE_LEN_INCLK_LSB, 0x6c},
 };
 
+
 //4x4 binning 10bit
 static imx477_reg_t mode_1332x990_regs[] = {
 		{0x420b, 0x01},
@@ -915,19 +916,19 @@ imgsensor_mode_t *sensor_config;
 
 static imgsensor_mode_t sensor_config_2Lane[] = {
 		{
-				.sensor_mode = 1,
-				.integration = 0x7E,
-				.width = 640,
-				.height = 480,
-				.frame_length= 557, //decided frame rate along with mode regs
-				.fps = 200,
-				.gain = 0,			//TODO: find 640x480 Reg list, For now just place holder
-				.test_pattern =0,
-				.bits = 10,
-				.reg_list  = {
-						.num_of_regs = _countof(mode_640x480_regs),
-						.regs = mode_640x480_regs,
-				}
+			.sensor_mode = 1,
+			.integration = 0x7E,
+			.width = 640,
+			.height = 480,
+			.frame_length= 557, //decided frame rate along with mode regs
+			.fps = 200,
+			.gain = 0,
+			.test_pattern =0,
+			.bits = 10,
+			.reg_list  = {
+					.num_of_regs = _countof(mode_640x480_regs),
+					.regs = mode_640x480_regs,
+			}
 		},
 		{
 				.sensor_mode = 1,
@@ -976,8 +977,8 @@ static imgsensor_mode_t sensor_config_2Lane[] = {
 				.sensor_mode = 1,
 				.width = 4056,
 				.height = 3040,
-				.frame_length= 3104, //decided frame rate along with mode regs
-				.fps = 5,			//TODO change Frame length for 5 FPS
+				.frame_length= 9312, //decided frame rate along with mode regs
+				.fps = 5,
 				.gain = 0,
 				.bits = 12,
 				.test_pattern =0,
@@ -1126,7 +1127,6 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 		{
 			if (interval == INTERVAL_MODE3)
 			{
-				//selected_img_mode = &sensor_config->mode_3280x2464_15;
 				selected_img_mode = &sensor_config[3];
 			}
 		}
