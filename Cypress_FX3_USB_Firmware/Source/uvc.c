@@ -1343,9 +1343,10 @@ UVCHandleProcessingUnitRqts (
                     glEp0Buffer[1] = 0;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
-                case CY_FX_USB_UVC_GET_MAX_REQ: /* Maximum brightness = 255. */
-                    glEp0Buffer[0] = 255;
-                    glEp0Buffer[1] = 0;
+                case CY_FX_USB_UVC_GET_MAX_REQ: /* Maximum brightness . */
+            		gain_val = getMaxBrightness();
+            		glEp0Buffer[0] = gain_val & 0xFF;
+            		glEp0Buffer[1] = (gain_val>>8) & 0xFF;
                     CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
                     break;
                 case CY_FX_USB_UVC_GET_RES_REQ: /* Resolution = 1. */
@@ -1370,9 +1371,9 @@ UVCHandleProcessingUnitRqts (
                     {
                         brightnessVal = CY_U3P_MAKEWORD(glEp0Buffer[1], glEp0Buffer[0]);
                         /* Update the brightness value only if the value is within the range */
-                        if(brightnessVal >= 0 && brightnessVal <= 255)
+                        if( brightnessVal <= getMaxBrightness())
                         {
-                            SensorSetBrightness (glEp0Buffer[0]);
+                            SensorSetBrightness (brightnessVal);
                         }
                     }
                     break;
@@ -1398,8 +1399,9 @@ UVCHandleProcessingUnitRqts (
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_MIN_REQ: /* Minimum brightness = 0. */
-        		glEp0Buffer[0] = 0;
-        		glEp0Buffer[1] = 0;
+        		exposure_val = sensor_get_min_exposure ();
+        		glEp0Buffer[0] = exposure_val & 0xFF;
+        		glEp0Buffer[1] = (exposure_val>>8) & 0xFF;
         		CyU3PUsbSendEP0Data (2, (uint8_t *)glEp0Buffer);
         		break;
         	case CY_FX_USB_UVC_GET_MAX_REQ: /* Maximum brightness = 255. */
@@ -1430,7 +1432,7 @@ UVCHandleProcessingUnitRqts (
         		{
         			exposure_val = CY_U3P_MAKEWORD(glEp0Buffer[1], glEp0Buffer[0]);
 
-       				//sensor_set_exposure (exposure_val);
+       				sensor_set_exposure (exposure_val);
         		}
         		break;
         	default:
