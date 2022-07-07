@@ -33,7 +33,7 @@ Tests
 
 - 4 Lane 10 bit IMX477</br>
 1332x990  200 FPS Binned 4x4</br>
-
+640x480   400 FPS Binned 4x4</br>
 
 - 2 Lane 12 bit IMX477</br>
 4056x3040  10 FPS Full Sensor</br>
@@ -42,7 +42,7 @@ Tests
 
 - 2 Lane 10 bit IMX477</br>
 1332x990  100 FPS Binned 4x4</br>
-
+640x480   200 FPS Binned 4x4</br>
 
 
 
