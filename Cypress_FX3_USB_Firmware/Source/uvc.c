@@ -13,8 +13,7 @@
 #include <cyu3socket.h>
 
 #include "uvc.h"
-//#include "sensor_imx219.h"
-#include "sensor_imx477.h"
+
 #include "camera_ptzcontrol.h"
 #include "cyfxgpif2config.h"
 #include "uvc_settings.h"

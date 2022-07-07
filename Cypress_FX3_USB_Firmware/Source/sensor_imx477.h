@@ -206,7 +206,7 @@
 #if LANES == 2
 #define SENSOR_MODE0_WIDTH							(unsigned int)640
 #define SENSOR_MODE0_HEIGHT							(unsigned int)480
-#define SENSOR_MODE0_FPS							(unsigned int)1000
+#define SENSOR_MODE0_FPS							(unsigned int)200
 
 #define SENSOR_MODE1_WIDTH							(unsigned int)1332
 #define SENSOR_MODE1_HEIGHT							(unsigned int)990

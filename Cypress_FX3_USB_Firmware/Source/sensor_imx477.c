@@ -779,29 +779,162 @@ static imx477_reg_t mode_1332x990_regs[] = {
 		{REG_LINE_LEN_INCLK_LSB, 0xbf},
 };
 
+
+//4x4 binning 10bit
+static imx477_reg_t mode_640x480_regs[] = {
+		{0x420b, 0x01},
+		{0x990c, 0x00},
+		{0x990d, 0x08},
+		{0x9956, 0x8c},
+		{0x9957, 0x64},
+		{0x9958, 0x50},
+		{0x9a48, 0x06},
+		{0x9a49, 0x06},
+		{0x9a4a, 0x06},
+		{0x9a4b, 0x06},
+		{0x9a4c, 0x06},
+		{0x9a4d, 0x06},
+		{REG_CSI_FORMAT_C, 0x0a},
+		{REG_CSI_FORMAT_D, 0x0a},
+		{REG_CSI_LANE, 0x01},
+		{REG_LINE_LEN_MSB, 0x1a},
+		{REG_LINE_LEN_LSB, 0x08},
+		{REG_FRAME_LEN_MSB, 0x04},
+		{REG_FRAME_LEN_LSB, 0x1a},
+		{REG_X_ADD_STA_MSB, 0x00},
+		{REG_X_ADD_STA_LSB, 0x00},
+		{REG_Y_ADD_STA_MSB, 0x02},
+		{REG_Y_ADD_STA_LSB, 0x10},
+		{REG_X_ADD_END_MSB, 0x0f},
+		{REG_X_ADD_END_LSB, 0xd7},
+		{REG_Y_ADD_END_MSB, 0x09},
+		{REG_Y_ADD_END_LSB, 0xcf},
+		{REG_DOL_HDR_EN, 0x00},
+		{REG_DOL_HDR_NUM, 0x00},
+		{REG_DOL_CSI_DT_FMT_H_2ND, 0x0a},
+		{REG_DOL_CSI_DT_FMT_L_2ND, 0x0a},
+		{REG_DOL_CSI_DT_FMT_H_3ND, 0x0a},
+		{REG_DOL_CSI_DT_FMT_L_3ND, 0x0a},
+		{REG_DOL_CONST, 0x00},
+		{0x0220, 0x00},
+		{0x0221, 0x11},
+		{REG_X_ENV_INC_CONST, 0x01},
+		{REG_X_ODD_INC_CONST, 0x01},
+		{REG_Y_ENV_INC_CONST, 0x01},
+		{REG_Y_ODD_INC, 0x01},
+		{REG_BINNING_MODE, 0x01},
+		{REG_BINNING_HV, 0x22},
+		{REG_BINNING_WEIGHTING, 0x02},
+		{0x3140, 0x02},
+		{0x3c00, 0x00},
+		{0x3c01, 0x01},
+		{0x3c02, 0x9c},
+		{REG_ADC_BIT_SETTING, 0x00},
+		{0x5748, 0x00},
+		{0x5749, 0x00},
+		{0x574a, 0x00},
+		{0x574b, 0xa4},
+		{0x7b75, 0x0e},
+		{0x7b76, 0x09},
+		{0x7b77, 0x08},
+		{0x7b78, 0x06},
+		{0x7b79, 0x34},
+		{0x7b53, 0x00},
+		{0x9369, 0x73},
+		{0x936b, 0x64},
+		{0x936d, 0x5f},
+		{0x9304, 0x03},
+		{0x9305, 0x80},
+		{0x9e9a, 0x2f},
+		{0x9e9b, 0x2f},
+		{0x9e9c, 0x2f},
+		{0x9e9d, 0x00},
+		{0x9e9e, 0x00},
+		{0x9e9f, 0x00},
+		{0xa2a9, 0x27},
+		{0xa2b7, 0x03},
+		{REG_SCALE_MODE, 0x00},
+		{REG_SCALE_M_MSbit, 0x00},
+		{REG_SCALE_M_LSB, 0x10},
+		{REG_DIG_CROP_X_OFFSET_MSB, 0x02},
+		{REG_DIG_CROP_X_OFFSET_LSB, 0x5c},
+		{REG_DIG_CROP_Y_OFFSET_MSB, 0x00},
+		{REG_DIG_CROP_Y_OFFSET_LSB, 0x00},
+		{REG_DIG_CROP_WIDTH_MSB, 0x02},
+		{REG_DIG_CROP_WIDTH_LSB, 0x80},
+		{REG_DIG_CROP_HEIGHT_MSB, 0x01},
+		{REG_DIG_CROP_HEIGHT_LSB, 0xE0},
+		{REG_X_OUT_SIZE_MSB, 0x02},
+		{REG_X_OUT_SIZE_LSB, 0x80},
+		{REG_Y_OUT_SIZE_MSB, 0x01},
+		{REG_Y_OUT_SIZE_LSB, 0xE0},
+		{REG_IVTPXCK_DIV, 0x05},
+		{REG_IVTSYCK_DIV, 0x02},
+		{REG_IVT_PREPLLCK_DIV, 0x02},
+		{REG_PLL_IVT_MPY_MSB, 0x00},
+		{REG_PLL_IVT_MPY_LSB, 0x9B},
+		{REG_IOPPXCK_DIV, 0x0a},
+		{REG_IOPSYCK_DIV, 0x02},
+		{REG_IOP_PREPLLCK_DIV, 0x02},
+		{REG_IOP_MPY_MSB, 0x00},
+		{REG_IOP_MPY_LSB, 0x85},
+		{REG_PLL_MULTI_DRV, 0x01},
+		{REG_REQ_LINK_BIT_RATE_MSB, 0x07},      //does not seems to be actually affecting link rate
+		{REG_REQ_LINK_BIT_RATE_LMSB, 0x08},
+		{REG_REQ_LINK_BIT_RATE_MLSB, 0x00},
+		{REG_REQ_LINK_BIT_RATE_LSB, 0x00},
+		{REG_TCLK_POST_EX_MSB, 0x00},
+		{REG_TCLK_POST_EX_LSB, 0x7f},
+		{REG_THS_PRE_EX_MSB, 0x00},
+		{REG_THS_PRE_EX_LSB, 0x4f},
+		{REG_THS_ZERO_MIN_MSB, 0x00},
+		{REG_THS_ZERO_MIN_LSB, 0x77},
+		{REG_THS_TRAIL_EX_MSB, 0x00},
+		{REG_THS_TRAIL_EX_LSB, 0x5f},
+		{REG_TCLK_TRAIL_MIN_MSB, 0x00},
+		{REG_TCLK_TRAIL_MIN_LSB, 0x57},
+		{REG_TCLK_PREP_EX_MSB, 0x00},
+		{REG_TCLK_PREP_EX_LSB, 0x4f},
+		{REG_TCLK_ZERO_EX_MSB, 0x01},
+		{REG_TCLK_ZERO_EX_LSB, 0x27},
+		{REG_TLPX_EX_MSB, 0x00},
+		{REG_TLPX_EX_LSB, 0x3f},
+		{0xe04c, 0x00},
+		{0xe04d, 0x5f},
+		{0xe04e, 0x00},
+		{0xe04f, 0x1f},
+		{0x3e20, 0x01},
+		{REG_PDAF_CTRL1_0, 0x00},
+		{REG_POWER_SAVE_ENABLE, 0x00},
+		{REG_LINE_LEN_INCLK_MSB, 0x00},
+		{REG_LINE_LEN_INCLK_LSB, 0xbf},
+};
+
 imgsensor_mode_t *sensor_config;
 
 
-static imgsensor_mode_t sensor_config_2Lane_12bit[] = {
+static imgsensor_mode_t sensor_config_2Lane[] = {
 		{
-						.sensor_mode = 1,
-						.integration = 0x7E,
-						.width = 640,
-						.height = 480,
-						.fps = 100,
-						.gain = 0,			//TODO: find 640x480 Reg list, For now just place holder
-						.test_pattern =0,
-						.bits = 10,
-						.reg_list  = {
-								.num_of_regs = _countof(mode_1332x990_regs),
-								.regs = mode_1332x990_regs,
-						}
+				.sensor_mode = 1,
+				.integration = 0x7E,
+				.width = 640,
+				.height = 480,
+				.frame_length= 557, //decided frame rate along with mode regs
+				.fps = 200,
+				.gain = 0,			//TODO: find 640x480 Reg list, For now just place holder
+				.test_pattern =0,
+				.bits = 10,
+				.reg_list  = {
+						.num_of_regs = _countof(mode_640x480_regs),
+						.regs = mode_640x480_regs,
+				}
 		},
 		{
 				.sensor_mode = 1,
 				.integration = 0x7E,
 				.width = 1332,
 				.height = 990,
+				.frame_length= 1115, //decided frame rate along with mode regs
 				.fps = 100,
 				.gain = 0,
 				.test_pattern =0,
@@ -1017,7 +1150,7 @@ void sensor_handle_uvc_control(uint8_t frame_index, uint32_t interval)
 		}
 	}
 
-	//sensor_configure_mode (selected_img_mode);
+	sensor_configure_mode (selected_img_mode);
 }
 void sensor_configure_mode(imgsensor_mode_t * mode)
 {
@@ -1057,7 +1190,8 @@ void sensor_configure_mode(imgsensor_mode_t * mode)
 //	sensor_i2c_write(REG_TP_HEIGHT_MSB, GET_WORD_MSB(mode->height));
 //	sensor_i2c_write(REG_TP_HEIGHT_LSB, GET_WORD_LSB(mode->height));
 
-	camera_stream_on(sensor_config->sensor_mode);
+	//camera_stream_on(sensor_config->sensor_mode);
+	camera_stream_on(1);
 }
 
 uint8_t	SensorI2cBusTest (void)
@@ -1090,7 +1224,7 @@ void SensorInit (void)
 		//CyU3PDebugPrint (4, "Reg 0x%x val 0x%x\n", (mode_default + i)->address, (mode_default + i)->val);
 		sensor_i2c_write((mode_default + i)->address, (mode_default + i)->val);
 	}
-	sensor_config = sensor_config_2Lane_12bit;
+	sensor_config = sensor_config_2Lane;
 	sensor_configure_mode(&sensor_config[0]);
 }
 
