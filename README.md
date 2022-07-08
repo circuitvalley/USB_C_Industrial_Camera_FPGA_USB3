@@ -29,8 +29,8 @@ Tests
 IMX477
 ------------
 - 4 Lane 12 bit IMX477</br>
-4056x3040  20 FPS Full Sensor</br>
-2028x1520  70 FPS Full Sensor Binned 2x2</br> 
+4056x3040  15 FPS Full Sensor</br>
+2028x1520  60 FPS Full Sensor Binned 2x2</br> 
 2028x1080  100 FPS</br>
 
 - 4 Lane 10 bit IMX477</br>
