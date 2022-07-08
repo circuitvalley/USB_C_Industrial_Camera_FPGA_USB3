@@ -34,7 +34,7 @@ IMX477
 2028x1080  100 FPS</br>
 
 - 4 Lane 10 bit IMX477</br>
-1332x990  200 FPS Binned 4x4</br>
+1332x990  150 FPS Binned 4x4</br>
 640x480   400 FPS Binned 4x4</br>
 
 - 2 Lane 12 bit IMX477</br>
