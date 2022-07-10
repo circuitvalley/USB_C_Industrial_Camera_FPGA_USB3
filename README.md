@@ -22,7 +22,8 @@ Pipeline is Configurable with a parameter to Process 2,4 or 8 Pixel.  2 Pixel Pe
 - **Selectable MIPI Gear Ratio**</br>
 User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DDR/MIPI phy supports 8x Gear while few do support 16x gear.</br>
 Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width , lane or PPC is changed.</br>
-
+- **Selectable MIPI continious clock mode**</br>
+User and select between clock lp based Frame sync or Frame start and frame stop package based frame sync, Some MIPI cameras do not support going to LP mode while frame blank occur, With this option user can enable Frame Start and Frame stop detection, to have a frame sync.
 
 Tests 
 ------------
