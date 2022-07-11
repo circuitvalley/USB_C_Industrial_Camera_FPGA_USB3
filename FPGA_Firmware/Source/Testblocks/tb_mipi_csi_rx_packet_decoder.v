@@ -55,9 +55,9 @@ initial begin
 		sendbytes(16'h0000);
 		sendbytes(16'h0000);
 		sendbytes(16'h0000);
+		sendbytes(16'h0000);
+		sendbytes(16'h0000);
 		input_valid = 1'h1;
-		sendbytes(16'h0000);
-		sendbytes(16'h0000);
 		sendbytes(16'hB8B8);
 		sendbytes(16'h062B);
 		sendbytes(16'hDD00);

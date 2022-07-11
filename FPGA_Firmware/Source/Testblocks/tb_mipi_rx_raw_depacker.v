@@ -5,14 +5,14 @@ module tb_mipi_rx_raw_depacker();
 		reg clk;
 	reg bytes_valid;
 	reg  [15:0]bytes_i;
-	wire [27:0]bytes_o;
+	wire [23:0]bytes_o;
 	wire synced;
 	reg [2:0]packet_type;
 wire reset_g;
 wire raw_line_valid;
 
 
-mipi_csi_rx_raw_depacker_8b2lane_2ppc #(.PIXEL_WIDTH(14)) ins1(	.clk_i(clk),
+mipi_csi_rx_raw_depacker_8b2lane_2ppc #(.PIXEL_WIDTH(12)) ins1(	.clk_i(clk),
 						.data_valid_i(bytes_valid),
 						.data_i(bytes_i),
 						.packet_type_i(packet_type),
