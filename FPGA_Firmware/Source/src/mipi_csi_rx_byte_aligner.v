@@ -75,7 +75,7 @@ begin
 		
 		byte_valid_o <= valid_reg;
 		
-		if (synced & !valid_reg)
+		if (synced & !valid_reg)// also check for valid_reg to be intive, this make sure that once sync is detected no further sync are concidered till next reset
 		begin
 			sync_offset <= offset;
 			valid_reg <= 1'h1;

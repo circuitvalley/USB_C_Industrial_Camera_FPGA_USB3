@@ -19,13 +19,13 @@ First line is expected to BGBG , second line GRGR Basically BGGR format
 */
 
 module debayer_filter #(parameter PIXEL_WIDTH=14 , parameter PIXEL_PER_CLK=8 )(clk_i,
-					  reset_i,
-					  line_valid_i,
-					  data_i, 	//lane 0 is LSbits 
-					  data_valid_i,
-					  output_valid_o, //lane 0 is LSbits
-					  output_o
-					  );
+								  reset_i,
+								  line_valid_i,
+								  data_i, 	//lane 0 is LSbits 
+								  data_valid_i,
+								  output_valid_o, //lane 0 is LSbits
+								  output_o
+								  );
 
 localparam INPUT_WIDTH = PIXEL_PER_CLK * PIXEL_WIDTH;	//Upto 8 x 16bit pixels from raw depacker module  (if 16bit each channel)
 localparam OUTPUT_WIDTH = PIXEL_WIDTH * PIXEL_PER_CLK * 3;  //Upto 8 x 48bit RGB output 
@@ -125,7 +125,7 @@ integer i;
 //line rams, total 4,
 //The way debayer is implemented in this code. Depending on pixel, we need minimum 2 lines and  maximum 3 lines in the ram, To be able to have access to neighboring pixels from previous and next line
 //There are many ways to implemented debayer, this code implement simplest possible bare minimum.
-//IMX219 Camera only output BGGR as defined by the IMX219 Driver in linux repo MEDIA_BUS_FMT_SBGGR10_1X10,  Camera datasheet incrorrectly defines output as RGGB and GBRG. Data sheet is incorrect in this case.
+//IMX219/IMX477/IMX290/IMX462/IMX327 Camera only output BGGR as defined by Driver in linux repo MEDIA_BUS_FMT_SBGGR10_1X10,  Camera datasheet incrorrectly defines output as RGGB and GBRG. Data sheet is incorrect in this case.
 //Bayer filter type does not affet test pattern. 
 
 //ebr ram_dp write address and data is latched on same rising edge of write clock

@@ -27,8 +27,7 @@ module mipi_csi_rx_packet_decoder_16b4lane(
 											output_valid_o,
 											data_o,
 											packet_length_o,
-											packet_type_o,
-											debug_o
+											packet_type_o
 											);
 localparam [7:0]MIPI_GEAR = 16;
 localparam [3:0]LANES = 3'h4;
@@ -46,12 +45,10 @@ output reg output_valid_o;
 output reg [15:0]packet_length_o;
 output reg [2:0]packet_type_o;
 
-output [15:0]debug_o;
 
 reg output_valid_reg;
 reg [15:0]packet_length_reg;
 reg [((MIPI_GEAR * LANES) - 1'h1):0]data_reg;
-assign debug_o = packet_length_reg;
 
 //packet format <SYNC_BYTE> <DataID> <WCount 8bit> <WCount8bit> <ECC8bit>
 always @(posedge clk_i)
@@ -67,7 +64,6 @@ begin
 		end
 		else if (data_reg[7:0] == SYNC_BYTE && (data_reg[15:8] == MIPI_CSI_PACKET_10bRAW || data_reg[15:8] == MIPI_CSI_PACKET_12bRAW || data_reg[15:8] == MIPI_CSI_PACKET_14bRAW))
 		begin
-			//TODO: better timings could be achieved by just copy whole data_reg into a reg and later take individual values from that reg
 			packet_type_o <= data_reg[10:8];
 			packet_length_o <= {data_reg[47:40], data_reg[31:24]};
 			packet_length_reg <= {data_reg[47:40], data_reg[31:24]};

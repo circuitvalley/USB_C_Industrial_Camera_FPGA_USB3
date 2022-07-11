@@ -96,11 +96,11 @@ begin
 	
 	output_10b[(PIXEL_WIDTH)   +: PIXEL_WIDTH] = 	{pipe [offset_pixel_1 	+:8], 	pipe[(offset_pixel_lsb1+2) +:2],  {(PIXEL_WIDTH - 10){1'b0}}};		//lane 2 //add ( PIXEL_WIDTH - 10 ) padding in the LSbits
 	output_10b[0  			   +: PIXEL_WIDTH] = 	{pipe [offset_pixel_0	+:8], 	pipe[offset_pixel_lsb1 	   +:2],  {(PIXEL_WIDTH - 10){1'b0}}}; 		//lane 1 first pixel on wire	
-	//additional LSbits  are as follow [ pixel3 pixel2 pixel 1 pixel0]
+	//RAW10 additional LSbits  are as follow [ pixel3 pixel2 pixel 1 pixel0]
 
 	output_12b[(PIXEL_WIDTH)   +: PIXEL_WIDTH] =	{pipe [offset12_pixel_1 +:8], 	pipe[(offset12_pixel_lsb1+4)	+:4],  {(PIXEL_WIDTH - 12){1'b0}}};
 	output_12b[0  			   +: PIXEL_WIDTH] =	{pipe [offset12_pixel_0	+:8], 	pipe[offset12_pixel_lsb1 		+:4],  {(PIXEL_WIDTH - 12){1'b0}}}; 		//lane 1 first pixel on wire
-	//additional LSbits  are as follow [pixel 1 pixel0]
+	//RAW12 additional LSbits  are as follow [pixel 1 pixel0]
 
 /*	
 	output_14b[31:16] = 	{pipe [offset_15 	-:8], 	pipe [offset_43 	-:6]} << 2;

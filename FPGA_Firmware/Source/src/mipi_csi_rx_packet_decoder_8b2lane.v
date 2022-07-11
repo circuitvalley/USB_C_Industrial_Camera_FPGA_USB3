@@ -26,8 +26,7 @@ module mipi_csi_rx_packet_decoder_8b2lane(
 								output_valid_o,
 								data_o,
 								packet_length_o,
-								packet_type_o,
-								debug_o
+								packet_type_o
 								);
 localparam [7:0]MIPI_GEAR = 8;
 localparam [3:0]LANES = 3'h2;
@@ -45,13 +44,11 @@ output reg output_valid_o;
 output reg [15:0]packet_length_o;
 output reg [2:0]packet_type_o;
 
-output [15:0]debug_o;
 reg output_valid_reg;
 
 reg [15:0]packet_length_reg;
 reg [((MIPI_GEAR * LANES) - 1'h1) :0]data_reg;
 
-assign debug_o = packet_length_reg;
 
 
 //packet format <SYNC_BYTE> <DataID> <WCount 8bit> <WCount8bit> <ECC8bit>

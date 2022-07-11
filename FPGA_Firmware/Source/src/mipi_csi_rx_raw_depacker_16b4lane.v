@@ -11,7 +11,7 @@ work.  If not, see <http://creativecommons.org/licenses/by/3.0/>.
 */
 
 /*
-Receives 4 lane raw mipi bytes from packet decoder, rearrange bytes to output 8 pixel 16bit each 
+Receives 4 lane raw mipi bytes from packet decoder, rearrange bytes to output 8 pixel upto 16bit each 
 output is one clock cycle delayed, because the way , MIPI RAW is packed 
 output come in chunk on each clock cycle, output_valid_o remains active only while 20 pixel chunk is outputted 
 */
@@ -24,7 +24,7 @@ module mipi_csi_rx_raw_depacker_16b4lane(	clk_i,
 											output_valid_o,
 											output_o);
 
-localparam [2:0]TRANSFERS_PERCHUNK= 3'h5; // RAW 10 is packed <Sample0[9:2]> <Sample1[9:2]> <Sample2[9:2]> <Sample3[9:2]> <Sample0[1:0],Sample1[1:0],Sample2[1:0],Sample3[1:0]>
+
 localparam [7:0]MIPI_CSI_PACKET_10bRAW = 8'h2B;
 localparam [7:0]MIPI_CSI_PACKET_12bRAW = 8'h2C;
 localparam [7:0]MIPI_CSI_PACKET_14bRAW = 8'h2D;

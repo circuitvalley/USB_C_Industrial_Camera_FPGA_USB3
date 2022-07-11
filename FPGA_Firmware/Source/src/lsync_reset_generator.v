@@ -1,3 +1,6 @@
+//MIPI Data line HS to LP transition can cause gragage data into bus,
+//This moduel holds reset a little longer before stable data comes throw 
+
 module line_reset_generator(clk_i, lp_data_i, line_reset_o);
 input clk_i;
 input lp_data_i;
