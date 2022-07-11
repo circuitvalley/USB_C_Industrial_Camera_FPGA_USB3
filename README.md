@@ -73,11 +73,11 @@ IMX219
 
 IMX290/IMX327/IMX462
 ------------
-- 4 Lane 12 bit IMX219</br>
+- 4 Lane 12 bit</br>
 1280x720  120 FPS</br>
 1920x1080 120 FPS</br>
 
-- 2 Lane 12 bit IMX219</br>
+- 2 Lane 12 bit</br>
 1280x720  60 FPS</br>
 1920x1080 60 FPS</br>
 
