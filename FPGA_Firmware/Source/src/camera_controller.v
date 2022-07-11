@@ -43,7 +43,7 @@ begin
 		
 		if (state_time_counter == 0)
 		begin
-			camera_state <= camera_state + (camera_state != state_idle); //go to next state if state is not equal to state_active
+			camera_state <= camera_state + (camera_state != state_idle); //go to next state if state is not equal to state_idle
 			
 			case(camera_state)
 			state_reset:
