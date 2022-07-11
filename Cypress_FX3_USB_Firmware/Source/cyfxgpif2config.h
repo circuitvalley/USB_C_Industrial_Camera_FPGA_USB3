@@ -1,6 +1,6 @@
 /*
  * Project Name: fx3_uvc.cyfx
- * Time : 06/09/2022 03:50:05
+ * Time : 06/15/2022 00:44:52
  * Device Type: FX3
  * Project Type: GPIF2
  *
@@ -98,7 +98,7 @@ uint8_t CyFxGpifWavedataPosition[]  = {
    GPIF II configuration register values.
  */
 uint32_t CyFxGpifRegValue[]  = {
-    0x80008308,  /*  CY_U3P_PIB_GPIF_CONFIG */
+    0x80008700,  /*  CY_U3P_PIB_GPIF_CONFIG */
     0x0000006C,  /*  CY_U3P_PIB_GPIF_BUS_CONFIG */
     0x00000000,  /*  CY_U3P_PIB_GPIF_BUS_CONFIG2 */
     0x00000046,  /*  CY_U3P_PIB_GPIF_AD_CONFIG */
