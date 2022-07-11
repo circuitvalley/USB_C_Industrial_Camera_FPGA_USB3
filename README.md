@@ -24,6 +24,8 @@ User can select weather to operate MIPI/DDR phy in 16x or 8x Gear ratio. Most DD
 Block RAM and DDR PHY IPs need to be manually regenerated if Gear, pixel width , lane or PPC is changed.</br>
 - **Selectable MIPI continuous clock mode**</br>
 User and select between MIPI clock lp based Frame sync or Frame start and frame stop packt based frame sync. Some MIPI cameras do not support going to LP mode while frame blank occur, With this option user can enable Frame Start and Frame stop detection, to have a frame sync.
+- **Selectable ROM based Sample Generator**</br>
+For ISP debuging ROM based sample generator can be activated. Two ROM lines are there have both even and odd line to full image test.
 
 Tests 
 ------------
