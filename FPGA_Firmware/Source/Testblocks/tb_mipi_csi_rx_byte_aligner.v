@@ -5,80 +5,21 @@ module tb_rx_byte_aligner;
 	reg clk;
 	reg reset;
 	reg  [15:0]byte_i;
-	wire [63:0]byte_o;
+	wire [15:0]byte_o;
 
-wire reset_g;
 GSR 
 GSR_INST (
 	.GSR_N(1'b1),
 	.CLK(1'b0)
 );
 
-wire lane_aligned;
-wire [3:0]byte_synced;
-wire [63:0]lane_bytes;
-wire [127:0]unpacked_bytes;
-wire [63:0]decoded_data;
-wire decoded_valid;
-wire unpacked_valid;
-wire [2:0]packet_type;
-mipi_csi_rx_byte_aligner0 byte_inst1(	.clk_i(clk),
+wire byte_synced;
+mipi_csi_rx_byte_aligner byte_inst1(	.clk_i(clk),
 									.reset_i(reset),
 									.byte_i(byte_i),
 									.byte_o(byte_o[15:0]),
-									.byte_valid_o(byte_synced[0]));
+									.byte_valid_o(byte_synced));
 
-mipi_csi_rx_byte_aligner1 byte_inst2(	.clk_i(clk),
-									.reset_i(reset),
-									.byte_i(byte_i),
-									.byte_o(byte_o[31:16]),
-									.byte_valid_o(byte_synced[1]));
-						
-mipi_csi_rx_byte_aligner2 byte_inst3(	.clk_i(clk),
-									.reset_i(reset),
-									.byte_i(byte_i),
-									.byte_o(byte_o[47:32]),
-									.byte_valid_o(byte_synced[2]));
-
-mipi_csi_rx_byte_aligner3 byte_inst4(	.clk_i(clk),
-									.reset_i(reset),
-									.byte_i(byte_i),
-									.byte_o(byte_o[63:48]),
-									.byte_valid_o(byte_synced[3]));
-
-
-mipi_csi_rx_lane_aligner lane_ins1(	.clk_i(clk),
-						.reset_i(reset),
-						.bytes_valid_i(byte_synced),
-						.byte_i(byte_o),
-						.lane_valid_o(lane_aligned),
-						.lane_byte_o(lane_bytes));
-						
-mipi_csi_rx_packet_decoder dec1(.clk_i(clk),
-							 .data_valid_i(lane_aligned),
-							 .data_i(lane_bytes),
-							 .output_valid_o(decoded_valid),
-							 .data_o(decoded_data),
-							 .packet_length_o(),
-							 .packet_type_o(packet_type));
-							 
-mipi_csi_rx_raw_depacker depacker_ins1(	.clk_i(clk),
-						.data_valid_i(decoded_valid),
-						.data_i(decoded_data),
-						.packet_type_i(packet_type),
-						.output_valid_o(unpacked_valid),
-						.output_o(unpacked_bytes));
-
-
-wire rgb_output_valid;
-wire [383:0]rgb_output;
-debayer_filter debayer_ins1(	.clk_i(clk),
-						.reset_i(reset),
-						.line_valid_i(decoded_valid),
-						.data_i(unpacked_bytes),
-						.data_valid_i(unpacked_valid),
-						.output_valid_o(rgb_output_valid),
-						.output_o(rgb_output));
 						
 task sendbyte;
 	input [15:0]byte;
