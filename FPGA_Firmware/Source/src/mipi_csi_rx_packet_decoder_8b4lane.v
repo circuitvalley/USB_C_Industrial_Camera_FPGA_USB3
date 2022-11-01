@@ -52,42 +52,41 @@ reg [((MIPI_GEAR * LANES) - 1'h1):0]data_reg;
 //packet format <SYNC_BYTE> <DataID> <WCount 8bit> <WCount8bit> <ECC8bit>
 always @(posedge clk_i)
 begin
-	if (data_valid_i)
-	begin
-		output_valid_o <= |packet_length_reg;
+        if (data_valid_i)
+        begin
+                output_valid_o <= |packet_length_reg;
 
-		if (packet_length_reg >= (LANES))
-		begin
-			packet_length_reg <= packet_length_reg - (LANES);
-		end
-		else if (data_reg[7:0] == SYNC_BYTE && (data_reg[15:8] == MIPI_CSI_PACKET_10bRAW || data_reg[15:8] == MIPI_CSI_PACKET_12bRAW || data_reg[15:8] == MIPI_CSI_PACKET_14bRAW))
-		begin
-			//TODO: better timings could be achieved by just copy whole data_reg into a reg and later take individual values from that reg
-			packet_type_o <= data_reg[10:8];
-			packet_length_o <= {data_reg[47:40], data_reg[31:24]};
-			packet_length_reg <= {data_reg[47:40], data_reg[31:24]};
-		end
-		else
-		begin
-			packet_length_reg <= 15'h0;
-			packet_type_o <= 3'h0;
-			packet_length_o <= 15'h0;
-		end
-		
-	end
-	else 
-	begin
-		packet_type_o <= 3'h0;
-		packet_length_o <= 15'h0;
-		packet_length_reg <= 15'h0;
-		output_valid_o <= 1'h0;
-	end
+                if (packet_length_reg >= (LANES))
+                begin
+                        packet_length_reg <= packet_length_reg - (LANES);
+                end
+                else if (data_o[7:0] == SYNC_BYTE && (data_reg[7:0] == MIPI_CSI_PACKET_10bRAW || data_reg[7:0] == MIPI_CSI_PACKET_12bRAW || data_reg[7:0] == MIPI_CSI_PACKET_14bRAW))
+                begin
+                        packet_type_o     <= data_reg[2:0];
+                        packet_length_o   <= data_reg[23:8];
+                        packet_length_reg <= data_reg[23:8];
+                end
+                else
+                begin
+                        packet_length_reg <= 16'h0;
+                        packet_type_o <= 3'h0;
+                        packet_length_o <= 16'h0;
+                end
+
+        end
+        else
+        begin
+                packet_type_o <= 3'h0;
+                packet_length_o <= 16'h0;
+                packet_length_reg <= 16'h0;
+                output_valid_o <= 1'h0;
+        end
 end
 
 always @(posedge clk_i)
 begin
-		data_reg <= data_i;
-		data_o <= data_reg;
+                data_reg <= data_i;
+                data_o <= data_reg;
 end
 
 endmodule
