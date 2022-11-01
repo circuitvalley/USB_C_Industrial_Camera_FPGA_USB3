@@ -49,7 +49,6 @@ reg [10:0] input_pixel_count_meta1;
 reg [10:0] input_pixel_count_meta2;
 reg [10:0] input_pixel_count_meta3;
 reg [10:0] input_pixel_count_out_clk;
-reg [10:0] output_pixel_count;
 
 reg line_even_nodd_clk_i;				//select between two different RAM
 reg line_even_nodd_meta1;
