@@ -82,6 +82,12 @@ IMX290/IMX327/IMX462
 1920x1080 60 FPS</br>
 
 
+<a href="https://www.youtube.com/watch?v=dwXs9RB6uD0">
+<img src="https://github.com/circuitvalley/USB_C_Industrial_Camera_FPGA_USB3/raw/master/Hardware/Images/imx477_video.png" alt="IMX219" width="830" height="560">
+</a>
+
+
+
 #### Project Blog post 
 https://www.circuitvalley.com/2022/06/pensource-usb-c-industrial-camera-c-mount-fpga-imx-mipi-usb-3-crosslinknx.html
 
