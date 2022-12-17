@@ -54,6 +54,9 @@ reg line_even_nodd_clk_i;				//select between two different RAM
 reg line_even_nodd_meta1;
 reg line_even_nodd_meta2;
 reg line_even_nodd_meta3;
+reg line_even_nodd_meta4;
+reg line_even_nodd_meta5;
+reg line_even_nodd_meta6;
 reg line_even_nodd_out_clk; 
 
 reg last_line_sync;				//helps to determine edge of line sync for write address reset
@@ -119,7 +122,7 @@ assign output_o = line_even_nodd_clk_i? ram_odd_o:ram_even_o; //depeding on line
 
 
 
-always @(posedge clk_i )
+always @(posedge clk_i or posedge frame_sync_i)
 begin
 	if (frame_sync_i)
 	begin
@@ -132,7 +135,7 @@ begin
 	begin
 		last_line_sync <= line_sync_i;
 		
-		if (!last_line_sync && line_sync_i)
+		if (!last_line_sync && line_sync_i) // on rising edge of line_sync_i
 		begin
 			write_address <= 9'b0;
 			
@@ -149,17 +152,20 @@ end
 
 always @(negedge output_clk_i)
 begin
-		line_even_nodd_meta1 <= line_even_nodd_clk_i;
+		line_even_nodd_meta1 <= line_even_nodd_clk_i;		//This is Sync signal need to have more flip-flops to get more delay to make sure sync always arrive after pixel count is already setelled
 		line_even_nodd_meta2 <= line_even_nodd_meta1;
 		line_even_nodd_meta3 <= line_even_nodd_meta2;
-		line_even_nodd_out_clk <= line_even_nodd_meta3;
+		line_even_nodd_meta4 <= line_even_nodd_meta3;
+		line_even_nodd_meta5 <= line_even_nodd_meta4;
+		line_even_nodd_meta6 <= line_even_nodd_meta5;
+		line_even_nodd_out_clk <= line_even_nodd_meta6;
 		
 		
 		input_pixel_count_meta1 <= input_pixel_count_clk_i;
 		input_pixel_count_meta2 <= input_pixel_count_meta1;
 		input_pixel_count_meta3 <= input_pixel_count_meta2;
-		input_pixel_count_out_clk <= input_pixel_count_meta3;
-		
+   	    input_pixel_count_out_clk <= input_pixel_count_meta3;
+
 		last_line_even_nodd <= line_even_nodd_out_clk;
 
 		
