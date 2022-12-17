@@ -39,6 +39,7 @@ IMX477
 - 4 Lane 10 bit IMX477</br>
 1332x990  150 FPS Binned 4x4</br>
 640x480   400 FPS Binned 4x4</br>
+640x128   2400 FPS Binned 4x4</br>
 
 - 2 Lane 12 bit IMX477</br>
 4056x3040  10 FPS Full Sensor</br>
@@ -48,6 +49,7 @@ IMX477
 - 2 Lane 10 bit IMX477</br>
 1332x990  100 FPS Binned 4x4</br>
 640x480   200 FPS Binned 4x4</br>
+640x128   1200 FPS Binned 4x4</br>
 
 IMX219
 ------------
