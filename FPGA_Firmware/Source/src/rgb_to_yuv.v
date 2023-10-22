@@ -73,7 +73,7 @@ assign yuv_line_o = line_valid_i | rgb_valid_i | yuv_valid_o;
 // V = ((127R -106G -21B + 128) >>10) + 128
 
 reg [23:0]not_used24; //to suppress warning from the tool 
-always @(negedge  clk_i)
+always @(posedge  clk_i)
 begin
 	rgb_valid_stage1 <= rgb_valid_i; 
 	rgb_valid_stage2 <= rgb_valid_stage1;
@@ -94,7 +94,7 @@ begin
 
 	end
 	
-	for (i=0;i<PIXEL_PER_CLK; i = i + 2)	//only alternate U and V needed
+	for (i=0;i<PIXEL_PER_CLK; i = i + 2)	//only alternate U and V needed so loop with +2
 	begin
 
 		U_R[i] <= (43 *  rgb_i[((i* (PIXEL_WIDTH*3)) + (PIXEL_WIDTH*2)) +: PIXEL_WIDTH]);
