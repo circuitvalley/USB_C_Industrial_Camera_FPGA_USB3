@@ -118,7 +118,7 @@ reg  [(INPUT_WIDTH-1):0]last_ram_outputs_stage2[3:0]; //two clock cycle delayed 
 wire ram_write_enable;
 wire ram_clk;
 
-assign ram_clk = !clk_i; 
+assign ram_clk = clk_i; 
 assign ram_write_enable = line_valid_i;
 
 integer i;
@@ -181,7 +181,7 @@ line_ram_dp line3(.wr_clk_i(ram_clk),
 
 
 
-always @(posedge clk_i)	 //address should increment at "falling" edge of "ram_clk". It is inverted from clk_i
+always @(posedge clk_i)	 
 begin
 	if (!line_valid_i )
 	begin
@@ -237,7 +237,7 @@ begin
 	end
 end
 
-always @(negedge clk_i or posedge reset_i )
+always @(posedge clk_i or posedge reset_i )
 begin
 	if (reset_i)
 	begin
@@ -303,7 +303,7 @@ begin
 			end 
 end
 
-always @(negedge clk_i)
+always @(posedge clk_i)
 begin
 		for (i=0; i < PIXEL_PER_CLK ; i = i + 1)
 		begin
