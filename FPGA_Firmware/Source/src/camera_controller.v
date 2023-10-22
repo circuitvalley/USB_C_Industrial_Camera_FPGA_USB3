@@ -3,6 +3,7 @@
 module camera_controller(sclk_i, //a basic low freqency slow clock, should not be comming from MIPI block/Camera 
 						reset_i, //global reset
 						cam_ctrl_in, //control camera control input from host
+						cam_xce_o,
 						cam_pwr_en_o, //enable camera power 
 						cam_reset_o,  //camera reset to camera
 						cam_xmaster_o //camera master or slave 
@@ -13,6 +14,7 @@ input cam_ctrl_in;
 output reg cam_pwr_en_o;
 output reg cam_reset_o;
 output reg cam_xmaster_o;
+output reg cam_xce_o;
 
 reg [1:0]camera_state;
 parameter state_reset = 2'h0;
@@ -33,8 +35,9 @@ begin
 		state_time_counter <= delay_bewteen_state;
 		camera_state <= state_reset;
 		cam_pwr_en_o <= 1'b0;
-		cam_reset_o <= 1'b1;
+		cam_reset_o <= 1'b0;
 		cam_xmaster_o <= 1'b0;
+		cam_xce_o <= 1'b1;
 	end
 	else
 	begin
@@ -49,21 +52,22 @@ begin
 			state_reset:
 			begin
 				cam_pwr_en_o <= 1'b0;
-				cam_reset_o <= 1'b1;
+				cam_reset_o <= 1'b0;
 				cam_xmaster_o <= 1'b0;
+				cam_xce_o <= 1'b1;
 				state_time_counter <= delay_bewteen_state;
 			end
 			state_power_on:
 			begin
 				cam_pwr_en_o <= 1'b1;
-				cam_reset_o <= 1'b1;
+				cam_reset_o <= 1'b0;
 				cam_xmaster_o <= 1'b0;
 				state_time_counter <= delay_bewteen_state;
 			end
 			state_active:
 			begin
 				cam_pwr_en_o <= 1'b1;
-				cam_reset_o <= 1'b0;
+				cam_reset_o <= 1'b1;
 				cam_xmaster_o <= 1'b0;		
 				state_time_counter <= delay_bewteen_state;
 				
@@ -71,13 +75,13 @@ begin
 			state_idle:
 			begin
 				cam_pwr_en_o <= 1'b1;
-				cam_reset_o <= 1'b0;
+				cam_reset_o <= 1'b1;
 				cam_xmaster_o <= 1'b0;							
 			end
 			default:
 			begin
 				cam_pwr_en_o <= 1'b0;
-				cam_reset_o <= 1'b1;
+				cam_reset_o <= 1'b0;
 				cam_xmaster_o <= 1'b0;
 			end
 			endcase			
