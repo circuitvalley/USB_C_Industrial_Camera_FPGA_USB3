@@ -52,7 +52,7 @@ assign word = {last_byte,  last_byte_2};
 reg [((MIPI_GEAR * 2) - 1):0]last_word;
 reg synced;
 
-always @(negedge clk_i or posedge reset_i)
+always @(posedge clk_i )
 begin
 	if (reset_i)
 	begin
@@ -67,11 +67,11 @@ begin
 	else
 	begin
 		
-		last_byte <= byte_i;
+		last_byte 	<= byte_i;
 		last_byte_2 <= last_byte;
-		last_word <= word;
+		last_word 	<= word;
 		
-		byte_o <= last_word[sync_offset +:MIPI_GEAR]; // from offset 16bits upwards
+		byte_o <= last_word[sync_offset +:MIPI_GEAR]; // from offset MIPI_GEAR upwards
 		
 		byte_valid_o <= valid_reg;
 		
@@ -85,7 +85,7 @@ begin
 end
 
 
-
+ 
 always @(*)
 begin
 		offset = 0;

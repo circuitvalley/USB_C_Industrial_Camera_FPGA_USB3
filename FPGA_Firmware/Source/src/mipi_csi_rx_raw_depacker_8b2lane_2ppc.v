@@ -110,8 +110,8 @@ begin
         output_12b[0                       +: PIXEL_WIDTH] =    {pipe [offset12_pixel_0 +:8],   pipe[offset12_pixel_lsb1                +:4],  {(PIXEL_WIDTH - 12){1'b0}}};             //lane 1 first pixel on wire
         //RAW12 additional LSbits  are as follow [pixel 1 pixel0]
 
-        output_14b[(PIXEL_WIDTH)   +: PIXEL_WIDTH] =    {pipe [offset12_pixel_1 +:8],   pipe[(offset12_pixel_lsb1+4)    +:4],  {(PIXEL_WIDTH - 14){1'b0}}};
-        output_14b[0                       +: PIXEL_WIDTH] =    {pipe [offset12_pixel_0 +:8],   pipe[offset12_pixel_lsb1                +:4],  {(PIXEL_WIDTH - 14){1'b0}}};             //lane 1 first pixel on wire
+        //output_14b[(PIXEL_WIDTH)   +: PIXEL_WIDTH] =    {pipe [offset14_pixel_1 +:8],   pipe[(offset14_pixel_lsb1+4)    +:4],  {(PIXEL_WIDTH - 14){1'b0}}};
+        //output_14b[0                +: PIXEL_WIDTH] =    {pipe [offset14_pixel_0 +:8],   pipe[offset14_pixel_lsb1                +:4],  {(PIXEL_WIDTH - 14){1'b0}}};             //lane 1 first pixel on wire
 
 
 end

@@ -10,24 +10,19 @@ You should have received a copy of the license along with this
 work.  If not, see <http://creativecommons.org/licenses/by/3.0/>.
 */
 
-/* z
-MIPI CSI 4 Lane Receiver To Parallel Bridge 
-Tested with Lattice MachXO3LF-6900 with IMX219 Camera 
+/* 
+MIPI CSI upto 4 Lane Receiver To Parallel Bridge 
+Tested with Lattice MachXO3LF-6900 with IMX219 Camera  and also with Crosslink NX with IMX290 IMX462 IMX219 IMX477
 Takes MIPI Clock and 4 Data lane as input convert into Parallel YUV output 
 Ouputs 32bit YUV data with Frame sync, lsync and pixel clock 
 */
 
-module mipi_csi_16_nx(	reset_in,
+module mipi_csi_16_nx(	//reset_in,
 						mipi_clk_p_in,
 						mipi_clk_n_in,
 						mipi_data_p_in,
 						mipi_data_n_in,
 
-						mipi_clk_p_in1,
-						mipi_clk_n_in1,
-						mipi_data_p_in1,
-						mipi_data_n_in1,
-						dummy_out,
 
 						pclk_o,  //data output on pos edge , should be latching into receiver on negedge
 						data_o,
@@ -35,7 +30,8 @@ module mipi_csi_16_nx(	reset_in,
 						lsync_o, //active high
 						
 						//these pins may or many not be needed depeding on hardware config
-						cam_ctrl_in, //control camera control input from host
+						//cam_ctrl_in, //control camera control input from host
+						cam_xce_o, //camera interface selection 
 						cam_pwr_en_o, //enable camera power 
 						cam_reset_o,  //camera reset to camera
 						cam_xmaster_o //camera master or slave 
@@ -43,25 +39,23 @@ module mipi_csi_16_nx(	reset_in,
 					
 parameter MIPI_LANES = 2;			//number of mipi lanes with camera. Only 2 or 4
 parameter MIPI_GEAR = 8;			//deserializer gearing ratio. Only 8 or 16 
-parameter MIPI_PIXEL_PER_CLOCK = 2; // number of pixels pipeline process in one clock cycle. With 2 Lanes and Gear 8 only 2 or 4 with gear 16 only 4 , With 4 Lanes only 4 or 8 
+parameter MIPI_PIXEL_PER_CLOCK = 2; //number of pixels pipeline process in one clock cycle. With 2 Lanes and Gear 8 only 2 or 4 with gear 16 only 4 , With 4 Lanes only 4 or 8 
 parameter MAX_PIXEL_WIDTH = 12;   	//max pixel width , 14bit (RAW14) , IMX219 has 10bit while IMX477 has 12bit and IMX294 has 14bit
-parameter FRAME_DETECT = 1;		//if 1 MIPI start frame packet will be detected and used as frame sync rather than mipi_clk_lp , used for sensor whoes clock does not go into lp while frame sync is inactive
+parameter FRAME_DETECT = 0; 		//if 1 MIPI start frame packet will be detected and used as frame sync rather than mipi_clk_lp , used for sensor whoes clock does not go into lp while frame sync is active
 
 //this should never be active unless testing 
-parameter SAMPLE_GENERATOR = 0;		//if 1 a ROM based sample generator will be activated for testing, Sample generator uses 2 ROM lines as that is what mipimum needed to an image with correct enough colors, ROM file are first.rom and second.rom
+parameter SAMPLE_GENERATOR = 0;		//if 1 a ROM based sample generator will be activated for testing, Sample generator uses 2 ROM lines as that is what mipimum needed to an image with correct enough colors, ROM file are rom_first.rom and rom_second.rom files are in source dir
 
-input reset_in;
-input cam_ctrl_in;
+wire reset_in;
+wire cam_ctrl_in;
 
 input mipi_clk_p_in;
 input mipi_clk_n_in;
 input [MIPI_LANES-1:0]mipi_data_p_in;
 input [MIPI_LANES-1:0]mipi_data_n_in;
-input mipi_clk_p_in1;
-input mipi_clk_n_in1;
-input [MIPI_LANES-1:0]mipi_data_p_in1;
-input [MIPI_LANES-1:0]mipi_data_n_in1;
 
+
+output cam_xce_o;
 output cam_pwr_en_o;
 output cam_reset_o;
 output cam_xmaster_o;
@@ -70,7 +64,6 @@ output pclk_o;
 output [31:0]data_o;
 output fsync_o;
 output lsync_o;
-output dummy_out;
 
 wire osc_clk;
 
@@ -91,8 +84,8 @@ wire is_yuv_valid;
 wire is_yuv_line_valid;
 
 wire mipi_out_clk;
-wire [31 :0]mipi_data_raw_hw;    
-wire [31 :0]mipi_data_raw;    
+wire [((MIPI_LANES * MIPI_GEAR) - 1) :0]mipi_data_raw_hw;    
+wire [((MIPI_LANES * MIPI_GEAR) - 1) :0]mipi_data_raw;    
 
 
 wire [((MIPI_LANES * MIPI_GEAR) - 1) :0]byte_aligned;
@@ -119,8 +112,10 @@ int_osc int_osc_ins1(.hf_out_en_i(1'b1),
 //Lattice FPGA Engineering sample chip does not allow manual PHY pin assignment* for PHY and our hardware uses PHY1 rather than PHY0, this instance with go to PHY0 while our actual instance will go to PHY 1
 //*Lattice Does allow manual pin assignment but when you assign manually PHY will not work at all. Appears to be ES chip bug.
 //As i am using Lattice ES chips i need to use Radiant 2.0 , DPHY IP has been changed a little with Radiant 3.1
+// If using ES Devices a dummy dphy_ip need to inferred as a place holder
+/*
 dphy_dummy mipi_csi_phy_inst0(.sync_clk_i(osc_clk), 
-							.sync_rst_i(1'b0), 
+							.sync_rst_i(1'b1), 
 							.lmmi_clk_i(1'b0), 
 							.lmmi_resetn_i(1'b0), 
 							.lmmi_wdata_i(4'b0), 
@@ -131,12 +126,12 @@ dphy_dummy mipi_csi_phy_inst0(.sync_clk_i(osc_clk),
 							.lmmi_rdata_o(), 
 							.lmmi_rdata_valid_o(), 
 							.hs_rx_en_i(1'b1), 
-							//.hs_rx_clk_en_i(1'b1),  
-							//.hs_rx_data_en_i(1'b1), 
-							//.hs_data_des_en_i(1'b1), 
+							//.hs_rx_clk_en_i(1'b0),  
+							//.hs_rx_data_en_i(1'b0), 
+							//.hs_data_des_en_i(1'b0), 
 							.hs_rx_data_o(dummy_out), 
 							//.hs_rx_data_sy nc_o(), 
-							.lp_rx_en_i(1'b1), 
+							.lp_rx_en_i(1'b0), 
 							.lp_rx_data_p_o(), 
 							.lp_rx_data_n_o(), 
 							.lp_rx_clk_p_o(), 
@@ -149,7 +144,7 @@ dphy_dummy mipi_csi_phy_inst0(.sync_clk_i(osc_clk),
 							.pd_dphy_i(1'b0), 
 							.clk_byte_o(), 
 							.ready_o()) ;
-
+*/
 
 csi_dphy  mipi_csi_phy_inst1(.sync_clk_i(osc_clk), 
 							.sync_rst_i(1'b0), 
@@ -162,10 +157,10 @@ csi_dphy  mipi_csi_phy_inst1(.sync_clk_i(osc_clk),
 							.lmmi_ready_o(), 
 							.lmmi_rdata_o(), 
 							.lmmi_rdata_valid_o(), 
-							.hs_rx_en_i(1'b1), 
-							//.hs_rx_clk_en_i(1'b1),  //new
-							//.hs_rx_data_en_i(1'b1), //new
-							//.hs_data_des_en_i(1'b1), //new
+							//.hs_rx_en_i(1'b1), 
+							.hs_rx_clk_en_i(1'b1),  //new
+							.hs_rx_data_en_i(1'b1), //new
+							.hs_data_des_en_i(1'b1), //new
 							.hs_rx_data_o(mipi_data_raw_hw), 
 							.hs_rx_data_sync_o(sync_pulse), 
 							.lp_rx_en_i(1'b1), 
@@ -173,7 +168,7 @@ csi_dphy  mipi_csi_phy_inst1(.sync_clk_i(osc_clk),
 							.lp_rx_data_n_o(), 
 							.lp_rx_clk_p_o(lp_rx_clk_p), 
 							.lp_rx_clk_n_o(), 
-							.pll_lock_i(1'b0), 
+							.pll_lock_i(1'b1), 
 							.clk_p_io(mipi_clk_p_in), 
 							.clk_n_io(mipi_clk_n_in), 
 							.data_p_io(mipi_data_p_in), 
@@ -208,10 +203,12 @@ assign mipi_data_raw = mipi_data_raw_hw;
 camera_controller camera_controller_ins0(	.sclk_i(osc_clk),
 											.reset_i(reset_in),
 											.cam_ctrl_in(cam_ctrl_in), 
+											.cam_xce_o(cam_xce_o),
 											.cam_pwr_en_o(cam_pwr_en_o), 
 											.cam_reset_o(cam_reset_o),  
 											.cam_xmaster_o(cam_xmaster_o)
-											);
+										);
+
 
 
 line_reset_generator line_reset_generator_ins0(.clk_i(mipi_byte_clock),
@@ -225,7 +222,7 @@ genvar i;
 
 	if (SAMPLE_GENERATOR)
 	begin
-		wire dummy_byte_valid;	//sample generator should neve be active unless debugging 
+		wire dummy_byte_valid;	//sample generator should never be active unless debugging 
 		assign is_byte_valid = {dummy_byte_valid,dummy_byte_valid};			
 		sample_generator sample_generator_ins( .framesync_i(frame_sync),
 												.clk_i(mipi_byte_clock),
@@ -270,12 +267,14 @@ endgenerate
 
 				
 									   
-mipi_csi_rx_lane_aligner #(.MIPI_GEAR(MIPI_GEAR), .MIPI_LANES(MIPI_LANES))mipi_rx_lane_aligner(	.clk_i(mipi_byte_clock),
-																								.reset_i(line_reset),
-																								.bytes_valid_i(is_byte_valid),
-																								.byte_i(byte_aligned),
-																								.lane_valid_o(is_lane_aligned_valid),
-																								.lane_byte_o(lane_aligned));
+mipi_csi_rx_lane_aligner #(	.MIPI_GEAR(MIPI_GEAR), 
+							.MIPI_LANES(MIPI_LANES))
+	   mipi_rx_lane_aligner(.clk_i(mipi_byte_clock),
+							.reset_i(line_reset),
+							.bytes_valid_i(is_byte_valid),
+							.byte_i(byte_aligned),
+							.lane_valid_o(is_lane_aligned_valid),
+							.lane_byte_o(lane_aligned));
 											   
 
 
@@ -285,64 +284,75 @@ generate
 	if ( (MIPI_GEAR == 16) && (MIPI_LANES == 4))
 	begin
 		mipi_csi_rx_packet_decoder_16b4lane mipi_csi_packet_decoder_0(	.clk_i(mipi_byte_clock),
-																	.data_valid_i(is_lane_aligned_valid),
-																	.data_i(lane_aligned),
-																	.output_valid_o(is_decoded_valid),
-																	.data_o(decoded_data),
-																	.packet_length_o(),
-																	.packet_type_o(packet_type));
+																		.data_valid_i(is_lane_aligned_valid),
+																		.data_i(lane_aligned),
+																		.output_valid_o(is_decoded_valid),
+																		.data_o(decoded_data),
+																		.packet_length_o(),
+																		.packet_type_o(packet_type));
 															
 		mipi_csi_rx_raw_depacker_16b4lane #(.PIXEL_WIDTH(MAX_PIXEL_WIDTH)) mipi_csi_rx_raw_depacker_0(	.clk_i(mipi_byte_clock),
-																	.data_valid_i(is_decoded_valid),
-																	.data_i(decoded_data),
-																	.packet_type_i(packet_type),
-																	.output_o(unpacked_data),
-																	.output_valid_o(is_unpacked_valid),
-																	.raw_line_o(is_raw_line_valid));	
+																										.data_valid_i(is_decoded_valid),
+																										.data_i(decoded_data),
+																										.packet_type_i(packet_type),
+																										.output_o(unpacked_data),
+																										.output_valid_o(is_unpacked_valid),
+																										.raw_line_o(is_raw_line_valid));	
 														
 	end
 	else if ( (MIPI_GEAR == 16) && (MIPI_LANES == 2))
 	begin
 		mipi_csi_rx_packet_decoder_16b2lane mipi_csi_packet_decoder_0(	.clk_i(mipi_byte_clock),
-																	.data_valid_i(is_lane_aligned_valid),
-																	.data_i(lane_aligned),
-																	.output_valid_o(is_decoded_valid),
-																	.data_o(decoded_data),
-																	.packet_length_o(),
-																	.packet_type_o(packet_type));
+																		.data_valid_i(is_lane_aligned_valid),
+																		.data_i(lane_aligned),
+																		.output_valid_o(is_decoded_valid),
+																		.data_o(decoded_data),
+																		.packet_length_o(),
+																		.packet_type_o(packet_type));
 																		
 																		
 
 		mipi_csi_rx_raw_depacker_16b2lane #(.PIXEL_WIDTH(MAX_PIXEL_WIDTH)) mipi_csi_rx_raw_depacker_0(	.clk_i(mipi_byte_clock),
-																	.data_valid_i(is_decoded_valid),
-																	.data_i(decoded_data),
-																	.packet_type_i(packet_type),
-																	.output_o(unpacked_data),
-																	.output_valid_o(is_unpacked_valid),
-																	.raw_line_o(is_raw_line_valid));
+																										.data_valid_i(is_decoded_valid),
+																										.data_i(decoded_data),
+																										.packet_type_i(packet_type),
+																										.output_o(unpacked_data),
+																										.output_valid_o(is_unpacked_valid),
+																										.raw_line_o(is_raw_line_valid));
 	end
-	else if ( (MIPI_GEAR == 8) && (MIPI_LANES == 4))
+	else if ( (MIPI_GEAR == 8) && (MIPI_LANES == 4))	//only 4 or 8 PPC
 	begin
 		
 		mipi_csi_rx_packet_decoder_8b4lane mipi_csi_packet_decoder_0(	.clk_i(mipi_byte_clock),
-																	.data_valid_i(is_lane_aligned_valid),
-																	.data_i(lane_aligned),
-																	.output_valid_o(is_decoded_valid),
-																	.data_o(decoded_data),
-																	.packet_length_o(),
-																	.packet_type_o(packet_type));
-																		
+																		.data_valid_i(is_lane_aligned_valid),
+																		.data_i(lane_aligned),
+																		.output_valid_o(is_decoded_valid),
+																		.data_o(decoded_data),
+																		.packet_length_o(),
+																		.packet_type_o(packet_type));
+		if (( MIPI_PIXEL_PER_CLOCK == 4) )
+		begin															
 		mipi_csi_rx_raw_depacker_8b4lane #(.PIXEL_WIDTH(MAX_PIXEL_WIDTH)) mipi_csi_rx_raw_depacker_0(	.clk_i(mipi_byte_clock),
-																	.data_valid_i(is_decoded_valid),
-																	.data_i(decoded_data),
-																	.packet_type_i(packet_type),
-																	.output_o(unpacked_data),
-																	.output_valid_o(is_unpacked_valid),
-																	.raw_line_o(is_raw_line_valid));
-
+																										.data_valid_i(is_decoded_valid),
+																										.data_i(decoded_data),
+																										.packet_type_i(packet_type),
+																										.output_o(unpacked_data),
+																										.output_valid_o(is_unpacked_valid),
+																										.raw_line_o(is_raw_line_valid));
+		end
+		else if(( MIPI_PIXEL_PER_CLOCK == 8) )
+		begin
+		mipi_csi_rx_raw_depacker_8b4lane_8ppc #(.PIXEL_WIDTH(MAX_PIXEL_WIDTH)) mipi_csi_rx_raw_depacker_0(	.clk_i(mipi_byte_clock),
+																											.data_valid_i(is_decoded_valid),
+																											.data_i(decoded_data),
+																											.packet_type_i(packet_type),
+																											.output_o(unpacked_data),
+																											.output_valid_o(is_unpacked_valid),
+																											.raw_line_o(is_raw_line_valid));			
+		end
 	end
 
-	else if ( (MIPI_GEAR == 8) && (MIPI_LANES == 2))
+	else if ( (MIPI_GEAR == 8) && (MIPI_LANES == 2)) //only 2 or 4 PPC
 	begin
 		
 		mipi_csi_rx_packet_decoder_8b2lane  mipi_csi_packet_decoder_0(	.clk_i(mipi_byte_clock),
@@ -357,12 +367,12 @@ generate
 		if (( MIPI_PIXEL_PER_CLOCK == 4) )
 		begin
 			mipi_csi_rx_raw_depacker_8b2lane #(.PIXEL_WIDTH(MAX_PIXEL_WIDTH)) mipi_csi_rx_raw_depacker_0(	.clk_i(mipi_byte_clock),
-																		.data_valid_i(is_decoded_valid),
-																		.data_i(decoded_data),
-																		.packet_type_i(packet_type),
-																		.output_o(unpacked_data),
-																		.output_valid_o(is_unpacked_valid),
-																		.raw_line_o(is_raw_line_valid));	
+																											.data_valid_i(is_decoded_valid),
+																											.data_i(decoded_data),
+																											.packet_type_i(packet_type),
+																											.output_o(unpacked_data),
+																											.output_valid_o(is_unpacked_valid),
+																											.raw_line_o(is_raw_line_valid));	
 		end
 		else if (( MIPI_PIXEL_PER_CLOCK == 2) )
 		begin
@@ -428,7 +438,8 @@ output_reformatter #(.PIXEL_PER_CLK(MIPI_PIXEL_PER_CLOCK))out_reformatter_0( .cl
 																			 .output_o(data_o),
 																			 .output_valid_o(lsync_o));
 
-
+assign reset_in = 1'b0;
+assign cam_ctrl_in = 1'b1;
 assign pclk_o = mipi_out_clk; 	//output clock always available
 assign fsync_o = !frame_sync;	 //activate fsync Active high
 //assign lsync_o = is_yuv_valid;

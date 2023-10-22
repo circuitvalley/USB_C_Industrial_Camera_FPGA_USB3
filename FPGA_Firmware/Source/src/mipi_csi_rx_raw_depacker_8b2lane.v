@@ -131,10 +131,10 @@ begin
     output_12b[0                   +: PIXEL_WIDTH] =    {pipe12 [offset12_pixel_0 +:8],   pipe12[ offset12_pixel_lsb1  		+:4],  {(PIXEL_WIDTH - 12){1'b0}}};             //lane 1 first pixel on wire
         //RAW12 additional LSbits  are as follow [pixel 1 pixel0]
 
-    output_14b[(PIXEL_WIDTH * 3)   +: PIXEL_WIDTH] =    {pipe14 [offset14_pixel_3 +:8],   pipe14[offset14_pixel_lsb1  + 18) +:6],  {(PIXEL_WIDTH - 14){1'b0}}};
-    output_14b[(PIXEL_WIDTH * 2)   +: PIXEL_WIDTH] =    {pipe14 [offset14_pixel_2 +:8],   pipe14[(offset14_pixel_lsb1 + 12) +:6],  {(PIXEL_WIDTH - 14){1'b0}}};
-    output_14b[(PIXEL_WIDTH)       +: PIXEL_WIDTH] =    {pipe14 [offset14_pixel_1 +:8],   pipe14[(offset14_pixel_lsb1 + 6)  +:6],  {(PIXEL_WIDTH - 14){1'b0}}};
-    output_14b[0                   +: PIXEL_WIDTH] =    {pipe14 [offset14_pixel_0 +:8],   pipe14[ offset14_pixel_lsb1		  +:6],  {(PIXEL_WIDTH - 14){1'b0}}};             //lane 1 first pixel on wire
+    //output_14b[(PIXEL_WIDTH * 3)   +: PIXEL_WIDTH] =    {pipe14 [offset14_pixel_3 +:8],   pipe14[offset14_pixel_lsb1  + 18) +:6],  {(PIXEL_WIDTH - 14){1'b0}}};
+    //output_14b[(PIXEL_WIDTH * 2)   +: PIXEL_WIDTH] =    {pipe14 [offset14_pixel_2 +:8],   pipe14[(offset14_pixel_lsb1 + 12) +:6],  {(PIXEL_WIDTH - 14){1'b0}}};
+    //output_14b[(PIXEL_WIDTH)       +: PIXEL_WIDTH] =    {pipe14 [offset14_pixel_1 +:8],   pipe14[(offset14_pixel_lsb1 + 6)  +:6],  {(PIXEL_WIDTH - 14){1'b0}}};
+    //output_14b[0                   +: PIXEL_WIDTH] =    {pipe14 [offset14_pixel_0 +:8],   pipe14[ offset14_pixel_lsb1		  +:6],  {(PIXEL_WIDTH - 14){1'b0}}};             //lane 1 first pixel on wire
 
 end
 

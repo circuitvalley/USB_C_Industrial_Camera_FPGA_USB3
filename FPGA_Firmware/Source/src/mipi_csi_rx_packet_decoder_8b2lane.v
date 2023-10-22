@@ -65,17 +65,16 @@ begin
 		end
 		else if (data_o[7:0] == SYNC_BYTE && (data_reg[7:0] == MIPI_CSI_PACKET_10bRAW || data_reg[7:0] == MIPI_CSI_PACKET_12bRAW || data_reg[7:0] == MIPI_CSI_PACKET_14bRAW))
 		begin
-			packet_type_o <= data_reg[2:0];
-			packet_length_o <= {data_i[7:0], data_reg[15:8]};
-			packet_length_reg <= {data_i[7:0], data_reg[15:8]};
+			packet_type_o     <= data_reg[2:0];
+			packet_length_o   <=  {data_i[7:0], data_reg[15:8]};
+			packet_length_reg <=  {data_i[7:0], data_reg[15:8]};
 		end
 		else
 		begin
 			packet_length_reg <= 15'h0;
-			packet_type_o <= 3'h0;
-			packet_length_o <= 15'h0;
+			packet_type_o     <=  3'h0;
+			packet_length_o   <= 15'h0;
 		end
-		
 	end
 	else 
 	begin
@@ -89,7 +88,7 @@ end
 always @(posedge clk_i)
 begin
 		data_reg <= data_i;
-		data_o <= data_reg;
+		data_o   <= data_reg;
 end
 
 endmodule
