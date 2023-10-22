@@ -19,7 +19,7 @@ rom_sec romsec_ins(.rd_clk_i(clk_i),
         .rd_addr_i(sample_counter), 
         .rd_data_o(output_second)) ;
 
-debug_rom debug_rom_ins(.rd_clk_i(clk_i), 
+rom_first debug_rom_ins(.rd_clk_i(clk_i), 
         .rst_i(reset_i), 
         .rd_en_i(1'b1), 
         .rd_clk_en_i(1'b1), 
@@ -27,7 +27,9 @@ debug_rom debug_rom_ins(.rd_clk_i(clk_i),
         .rd_data_o(output_first)) ;
 		
 reg [9:0]line_counter;
+
 assign byte_o = line_counter[0]?output_second:output_first;
+
 always @(posedge framesync_i or negedge reset_i)
 begin
 	if (framesync_i)
@@ -40,24 +42,20 @@ begin
 	end
 end
 
-always @(negedge clk_i)
+always @(posedge clk_i)
 begin
 	if (reset_i)
 	begin
 		sample_counter <= 16'h0;
-
 	end
 	else
 	begin
 		sample_counter <= sample_counter + 1'h1;
-			
 	end
-	
 end
 
 always @(*)
 begin
-	
 	if (reset_i)
 	begin
 		byte_valid_o = 1'b0;
