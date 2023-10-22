@@ -11,7 +11,7 @@ work.  If not, see <http://creativecommons.org/licenses/by/3.0/>.
 */
 
 /*
-Takes 32bit 2pixe to 128bit 8pixel yuv input from rgb2yuv module @ mipi byte clock outputs 32bit 2pixel yuv output @output_clk_i , 
+Takes 32bit 2pixel to 128bit 8pixel yuv input from rgb2yuv module @ mipi byte clock outputs 32bit 2pixel yuv output @output_clk_i , 
 output_clk_i can be totoally independnt phease and frequency of mipi_byte_clock, but frequnecy be fast enough to have full line transmitted before next line comes.
 This implementation of Output reformatter outputs data which which meant to send out of the system to a 32bit receiver
 depending on requirement this will be need to be adapted as per the receiver 
@@ -37,7 +37,7 @@ output reg output_valid_o;
 output [31:0]output_o;
 input output_clk_i;
 
-reg [10:0] write_address;
+reg [11:0] write_address;
 reg [11:0] read_address;
 
 
@@ -47,7 +47,6 @@ wire [31:0]ram_odd_o;
 reg [10:0] input_pixel_count_clk_i; //under clk_i domain
 reg [10:0] input_pixel_count_meta1;
 reg [10:0] input_pixel_count_meta2;
-reg [10:0] input_pixel_count_meta3;
 reg [10:0] input_pixel_count_out_clk;
 
 reg line_even_nodd_clk_i;				//select between two different RAM
@@ -55,8 +54,6 @@ reg line_even_nodd_meta1;
 reg line_even_nodd_meta2;
 reg line_even_nodd_meta3;
 reg line_even_nodd_meta4;
-reg line_even_nodd_meta5;
-reg line_even_nodd_meta6;
 reg line_even_nodd_out_clk; 
 
 reg last_line_sync;				//helps to determine edge of line sync for write address reset
@@ -64,61 +61,38 @@ reg last_line_even_nodd;		//helps to determine edge of line sync for read addres
 
 //ebr ram_dp write address and data is latched on same rising edge of write clock
 //read address is latached on rising edge of read clock and data outputed on same rising edge but after tCO_EBR so should be sampled on comming fallsing or next rising edge
-out_line_ram_dp line_odd(	.wr_clk_i(!clk_i), 
-							.rd_clk_i(output_clk_i), 
+
+
+out_line_ram_dp line_odd(	.wr_clk_i(clk_i),  					// write domain
 							.rst_i(frame_sync_i), 
 							.wr_clk_en_i(data_in_valid_i),
-							.rd_en_i(line_even_nodd_clk_i), 
-							.rd_clk_en_i(1'b1), 
 							.wr_en_i(!line_even_nodd_clk_i), 
 							.wr_data_i(data_i),
 							.wr_addr_i(write_address), 
+							
+							.rd_clk_i(output_clk_i), 			// read domain
+							.rd_en_i(line_even_nodd_out_clk), 
+							.rd_clk_en_i(1'b1), 
 							.rd_addr_i(read_address),  
 							.rd_data_o(ram_odd_o));
 
 
-out_line_ram_dp line_even(	.wr_clk_i(!clk_i), 
-							.rd_clk_i(output_clk_i), 
-							.rst_i(frame_sync_i), 
-							.wr_clk_en_i(data_in_valid_i), 
-							.rd_en_i(!line_even_nodd_clk_i), 
-							.rd_clk_en_i(1'b1), 
-							.wr_en_i(line_even_nodd_clk_i), 
-							.wr_data_i(data_i),
+out_line_ram_dp line_even(	.wr_clk_i(clk_i), 					
+							.rst_i(frame_sync_i),     			
+							.wr_clk_en_i(data_in_valid_i),   	
+							.wr_en_i(line_even_nodd_clk_i),  	
+							.wr_data_i(data_i),					
 							.wr_addr_i(write_address), 
-							.rd_addr_i(read_address), 
-							.rd_data_o(ram_even_o)); 
-
-/*
-out_line_ram_ldp line_odd(	.clk_i((line_even_nodd)?!clk_i:output_clk_i), 
-							.dps_i(1'b1), 
-							.rst_i(!frame_sync_i), 
-							.wr_clk_en_i(data_in_valid_i), 
-							.rd_clk_en_i(!line_even_nodd), 
-							.wr_en_i(line_even_nodd), 
-							.wr_data_i(data_i), 
-							.wr_addr_i(write_address), 
-							.rd_addr_i(read_address), 
-							.rd_data_o(ram_even_o), 
-							.lramready_o(), 
-							.rd_datavalid_o());
 							
-out_line_ram_ldp line_even(	.clk_i((!line_even_nodd)?!clk_i:output_clk_i), 
-							.dps_i(1'b1), 
-							.rst_i(!frame_sync_i), 
-							.wr_clk_en_i(data_in_valid_i), 
-							.rd_clk_en_i(line_even_nodd), 
-							.wr_en_i(!line_even_nodd), 
-							.wr_data_i(data_i), 
-							.wr_addr_i(write_address), 
-							.rd_addr_i(read_address), 
-							.rd_data_o(ram_odd_o), 
-							.lramready_o(), 
-							.rd_datavalid_o()) ;
-*/
+							.rd_clk_i(output_clk_i),  			
+							.rd_en_i(!line_even_nodd_out_clk), 	
+							.rd_clk_en_i(1'b1),  				
+							.rd_addr_i(read_address), 			
+							.rd_data_o(ram_even_o)); 			
+
 //assign output_o = line_even_nodd? ram_odd_o[((read_address[0])?6'd32:6'd0) +:32]: ram_even_o[((read_address[0])?6'd32:6'd0) +:32]; //depeding on line select even or odd ram , also select correct 32bit word from 64 bit ramoutput
 
-assign output_o = line_even_nodd_clk_i? ram_odd_o:ram_even_o; //depeding on line select even or odd ram 
+assign output_o = line_even_nodd_out_clk? ram_odd_o:ram_even_o; //depeding on line select even or odd ram 
 
 
 
@@ -150,21 +124,17 @@ begin
 end
 
 
-always @(negedge output_clk_i)
+always @(posedge output_clk_i)
 begin
-		line_even_nodd_meta1 <= line_even_nodd_clk_i;		//This is Sync signal need to have more flip-flops to get more delay to make sure sync always arrive after pixel count is already setelled
+		line_even_nodd_meta1 <= line_even_nodd_clk_i;		//This is Sync signal need to have more flip-flops to get more delay to make sure sync always arrive after pixel count is already setlled
 		line_even_nodd_meta2 <= line_even_nodd_meta1;
 		line_even_nodd_meta3 <= line_even_nodd_meta2;
 		line_even_nodd_meta4 <= line_even_nodd_meta3;
-		line_even_nodd_meta5 <= line_even_nodd_meta4;
-		line_even_nodd_meta6 <= line_even_nodd_meta5;
-		line_even_nodd_out_clk <= line_even_nodd_meta6;
+		line_even_nodd_out_clk <= line_even_nodd_meta4;
 		
 		
 		input_pixel_count_meta1 <= input_pixel_count_clk_i;
 		input_pixel_count_meta2 <= input_pixel_count_meta1;
-		input_pixel_count_meta3 <= input_pixel_count_meta2;
-   	    input_pixel_count_out_clk <= input_pixel_count_meta3;
 
 		last_line_even_nodd <= line_even_nodd_out_clk;
 
@@ -173,6 +143,7 @@ begin
 		begin
 			 read_address <= 12'b0;
 			 output_valid_o <= 1'b0;
+			 input_pixel_count_out_clk <= input_pixel_count_meta2;
 		end
 		else
 			begin
