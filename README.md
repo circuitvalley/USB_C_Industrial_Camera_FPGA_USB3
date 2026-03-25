@@ -1,6 +1,11 @@
 ### USB C industrial camera with Interchangeable C mount Lens, Interchangeable MIPI Sensor with Lattice Crosslink NX FPGA Cypress FX3 USB 3.0 controller
 
-## FPGA ISP Pipeline Specifications 
+New Verions CHC5 Open Source Camera is available
+<a href="https://www.youtube.com/watch?v=F9n1e-QN0zk">
+<img src="https://raw.githubusercontent.com/circuitvalley/CHC5_Open_Camera/refs/heads/main/Hardware/Images/chc5_open_camera_youtube.png" alt="OpenSourceCamera" width="830" height="560">
+</a>
+
+## FPGA ISP Pipeline Specifications
 MPI CSI receiver ISP has No virtual restriction on supported frame rate or resolution. Tested more than 4K with IMX477 4056x3040. Can do 8K with around 30FPS or even higher than that as long as FPGA is fast enough for needed frame rate and FPGA/Board has enough memory to be able to store minimum 4 Line worth of pixels. Output Clock is independent of MIPI clock.
 Easily Portable code to Xilinx or any other FPGA, No Vendor specific components has been used except for the PHY itself which can be replaced by other vendor's DDR phy and Embedded Block RAM. Only Debayer/Demosaic and Output reformatter need Block RAM. Block ram can also be replaced vendor's RAM.
 Auto detection of RAW pixel width supporting different camera sensors and sensor modes without FPGA reconfiguration. 
