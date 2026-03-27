@@ -2,7 +2,7 @@
 
 New Verions CHC5 Open Source Camera is available
 <a href="https://www.youtube.com/watch?v=F9n1e-QN0zk">
-<img src="https://raw.githubusercontent.com/circuitvalley/CHC5_Open_Camera/refs/heads/main/Hardware/Images/chc5_open_camera_youtube.png" alt="OpenSourceCamera" width="830" height="560">
+<img src="https://raw.githubusercontent.com/circuitvalley/CHC5_Open_Camera/refs/heads/main/Hardware/Images/chc5_open_camera_youtube.png" alt="OpenSourceCamera" width="415" height="330">
 </a>
 
 ## FPGA ISP Pipeline Specifications
