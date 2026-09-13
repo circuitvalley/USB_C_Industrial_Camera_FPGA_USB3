@@ -1,7 +1,6 @@
 ### USB C industrial camera with Interchangeable C mount Lens, Interchangeable MIPI Sensor with Lattice Crosslink NX FPGA Cypress FX3 USB 3.0 controller
 
-## New Verions CHC5 Open Source Camera is available.
-
+## <span style="color: red;">New Verions CHC5 Open Source Camera is available.</span>
 
 <a href="https://github.com/circuitvalley/CHC5_Open_Camera">
 <img src="https://raw.githubusercontent.com/circuitvalley/CHC5_Open_Camera/refs/heads/main/Hardware/Images/Hardware/chc5_camera_system_circuitvalley_publis.JPG" alt="OpenSourceCamera" width="450" height="250">
